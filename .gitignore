@@ -1,0 +1,36 @@
+.claude/
+.vscode/
+
+# Backend (Maven/Spring Boot)
+course-planning-api/target/
+course-planning-api/.mvn/
+course-planning-api/mvnw
+course-planning-api/mvnw.cmd
+course-planning-api/**/*.class
+course-planning-api/**/*.jar
+course-planning-api/**/*.war
+
+# Frontend (React/Node)
+maplewood-course-planning/node_modules/
+maplewood-course-planning/build/
+maplewood-course-planning/.env.local
+maplewood-course-planning/.env.development.local
+maplewood-course-planning/.env.test.local
+maplewood-course-planning/.env.production.local
+maplewood-course-planning/npm-debug.log*
+maplewood-course-planning/yarn-debug.log*
+maplewood-course-planning/yarn-error.log*
+
+# IDEs
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Dev container
+.devcontainer/.env
