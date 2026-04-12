@@ -35,11 +35,12 @@ public class Section {
   @JoinColumn(name = "classroom_id", nullable = false)
   private Classroom classroom;
 
+  @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+  private Set<TimeSlot> timeSlots = new HashSet<>();
+
   private int capacity;
 
   @OneToMany(mappedBy = "section")
   private Set<Enrollment> enrollments = new HashSet<>();
 
-  @OneToMany(mappedBy = "section")
-  private Set<TimeSlot> timeSlots = new HashSet<>();
 }

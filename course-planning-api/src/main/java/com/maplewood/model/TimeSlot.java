@@ -22,7 +22,7 @@ public class TimeSlot
   private int startHour;
   private int endHour;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "section_id")
   Section section;
 
@@ -31,5 +31,10 @@ public class TimeSlot
     this.day = day;
     this.startHour = startHour;
     this.endHour = endHour;
+  }
+
+  public String getKey()
+  {
+    return this.getDay() + "-" + this.getStartHour();
   }
 }
