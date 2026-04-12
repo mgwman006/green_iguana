@@ -1,0 +1,14 @@
+package com.maplewood.repository;
+
+import com.maplewood.model.Specialization;
+import com.maplewood.model.Teacher;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface TeacherRepository extends JpaRepository<Teacher, Long>
+{
+  List<Teacher> findBySpecialization(Specialization specialization);
+}
