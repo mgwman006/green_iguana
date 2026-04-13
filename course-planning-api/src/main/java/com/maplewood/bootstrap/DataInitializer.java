@@ -1,5 +1,6 @@
 package com.maplewood.bootstrap;
 
+import com.maplewood.service.enrollment.EnrollmentValidationService;
 import com.maplewood.service.scheduler.SectionGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +17,12 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
 
   private final SectionGeneratorService sectionGeneratorService;
-
+  private final EnrollmentValidationService enrollmentValidationService;
   @Override
   public void run(String... args)
   {
     sectionGeneratorService.resetSchedule();
     sectionGeneratorService.generateAllSections();
+    enrollmentValidationService.buildClosure();
   }
 }

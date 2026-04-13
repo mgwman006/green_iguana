@@ -38,9 +38,4 @@ public class Semester {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "semester")
-  private Set<Course> courses = new HashSet<>();
-
-  @OneToMany(mappedBy = "semester")
-  private Set<Section> sections = new HashSet<>();
 }

@@ -1,15 +1,12 @@
 package com.maplewood.service.scheduler;
 
-import com.maplewood.exception.initialization.InitializationException;
 import com.maplewood.model.*;
 import com.maplewood.repository.*;
-import com.maplewood.service.TimeSlotProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 /**
@@ -49,14 +46,6 @@ public class SectionGeneratorService {
    */
   public void generateAllSections()
   {
-    //Get the Active Semester
-    Optional<Semester> optionalSemester = semesterRepository.findActiveSemester();
-    if (optionalSemester.isEmpty())
-    {
-      throw new InitializationException("No active semester found");
-    }
-
-    Semester semester = optionalSemester.get();
 
     List<Classroom> rooms = classroomRepository.findAll();
     List<Teacher> teachers = teacherRepository.findAll();
@@ -68,14 +57,14 @@ public class SectionGeneratorService {
     teacherAvailabilityService.initialize(teachers);
     for (Course course : courses)
     {
-      generateSectionsForCourse(semester,course, teachers, rooms);
+      generateSectionsForCourse(course, teachers, rooms);
     }
   }
 
   /**
    * Generates sections for a single course.
    */
-  private void generateSectionsForCourse(Semester semester,Course course, List<Teacher> teachers, List<Classroom> rooms)
+  private void generateSectionsForCourse(Course course, List<Teacher> teachers, List<Classroom> rooms)
   {
     //Get all possible weekly Schedule
     List<Set<TimeSlot>> patterns = TimeSlotProvider.getPatterns(course.getHoursPerWeek());
@@ -130,7 +119,6 @@ public class SectionGeneratorService {
       section.setCourse(course);
       section.setTeacher(selectedTeacher);
       section.setClassroom(selectedRoom);
-      section.setSemester(semester);
 
       for (TimeSlot timeSlot : slots)
       {

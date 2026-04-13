@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "courses")
 @Getter
@@ -29,7 +31,7 @@ public class Course {
   @JoinColumn(name = "specialization_id")
   private Specialization specialization;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "prerequisite_id")
   private Course prerequisite;
 
@@ -42,9 +44,8 @@ public class Course {
   @Column(name = "grade_level_max")
   private int gradeLevelMax;
 
-  @ManyToOne
-  @JoinColumn(name = "semester_order")
-  private Semester semester;
+  @Column(name = "semester_order")
+  private Integer semesterOrder;
 
   @Column(name = "created_at")
   private LocalDateTime createAt;

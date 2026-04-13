@@ -43,4 +43,9 @@ public class Student {
 
   @Column(name = "created_at")
   private LocalDateTime createAt;
+
+  public boolean hasReachedCoursesLimit()
+  {
+    return this.enrollments.size()>=5;
+  }
 }
