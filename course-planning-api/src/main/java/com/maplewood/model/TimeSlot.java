@@ -37,4 +37,13 @@ public class TimeSlot
   {
     return this.getDay() + "-" + this.getStartHour();
   }
+
+  public boolean isOverlap(TimeSlot object)
+  {
+    if (!this.getDay().equals(object.getDay()))
+    {
+      return false;
+    }
+    return this.getStartHour() < object.getEndHour() && object.getStartHour() < this.getEndHour();
+  }
 }

@@ -24,10 +24,6 @@ public class Section {
   private Course course;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "semester_id", nullable = false)
-  private Semester semester;
-
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "teacher_id", nullable = false)
   private Teacher teacher;
 

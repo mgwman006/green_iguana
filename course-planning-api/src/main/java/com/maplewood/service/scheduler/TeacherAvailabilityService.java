@@ -77,6 +77,12 @@ public class TeacherAvailabilityService {
       }
     }
 
+//    boolean conflict = existingSlots.stream().anyMatch(existing ->
+//      existing.getDay().equals(slot.getDay()) &&
+//        existing.getStartHour() < slot.getEndHour() &&
+//        slot.getStartHour() < existing.getEndHour()
+//    );
+
     // Check daily hour limits (max 4 hours per day)
     Map<String, Long> hoursPerDay = slots.stream()
       .collect(Collectors.groupingBy(

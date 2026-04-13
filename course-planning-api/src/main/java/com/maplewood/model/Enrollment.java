@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Entity(name = "enrollments")
 @Getter
@@ -27,8 +28,8 @@ public class Enrollment {
   @JoinColumn(name = "section_id")
   private Section section;
 
-  private LocalDate enrolledAt;
+  private LocalDateTime enrolledAt;
 
   @Enumerated(EnumType.STRING)
-  private EnrollmentStatus status; // ACTIVE, DROPPED, COMPLETED
+  private EnrollmentStatus status;
 }

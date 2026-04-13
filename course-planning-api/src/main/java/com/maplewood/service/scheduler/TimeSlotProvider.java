@@ -1,4 +1,4 @@
-package com.maplewood.service;
+package com.maplewood.service.scheduler;
 
 
 import com.maplewood.model.TimeSlot;
