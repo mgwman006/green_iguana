@@ -11,15 +11,15 @@ course-planning-api/**/*.jar
 course-planning-api/**/*.war
 
 # Frontend (React/Node)
-maplewood-course-planning/node_modules/
-maplewood-course-planning/build/
-maplewood-course-planning/.env.local
-maplewood-course-planning/.env.development.local
-maplewood-course-planning/.env.test.local
-maplewood-course-planning/.env.production.local
-maplewood-course-planning/npm-debug.log*
-maplewood-course-planning/yarn-debug.log*
-maplewood-course-planning/yarn-error.log*
+course-planning-ui/node_modules/
+course-planning-ui/build/
+Course-planning-ui/.env.local
+course-planning-ui/.env.development.local
+course-planning-ui/.env.test.local
+course-planning-ui/.env.production.local
+course-planning-ui/npm-debug.log*
+course-planning-ui/yarn-debug.log*
+course-planning-ui/yarn-error.log*
 
 # IDEs
 .idea/
