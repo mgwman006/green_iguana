@@ -1,9 +1,9 @@
-import { Button, Card, Empty, Grid, List, Table, Tabs, TabsProps, Tag } from "antd";
+import { Button, Card, Empty, Grid, List, message, Table, Tabs, TabsProps, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { CourseDto, SectionDto } from "../../types/types";
-import { coursesApi } from "../../api/api";
+import { CourseDto, Enrollment, SectionDto } from "../../types/types";
+import { coursesApi, enrollmentsApi } from "../../api/api";
 import { useStudent } from "../../store/student/StudentContext";
 
 const { useBreakpoint } = Grid;
@@ -17,9 +17,12 @@ export default function CourseDetails()
     const navigate = useNavigate();
     const { courseId } = useParams();
     const [course, setCourse] = useState<CourseDto | null>(null);
-    const { state } = useStudent();
+    const { state, dispatch } = useStudent();
     const studentId = state.profile?.id;
     const [enrollingId, setEnrollingId] = useState<number | null>(null);
+    const [enrollment,setEntollment] = useState<Enrollment | null>(null);
+    const [messageApi, messageContextHolder] = message.useMessage();
+
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -41,7 +44,35 @@ export default function CourseDetails()
     if(!course)
         return;
 
-    const fullCheck = (section: SectionDto) => section.enrolledCount >= section.capacity;
+    const handleEnroll = async (sectionId: number) => {
+        if (!studentId) return;
+
+        try 
+        {
+            setEnrollingId(sectionId);
+
+            const data = await enrollmentsApi.enroll(studentId,sectionId);
+            setEntollment(data);
+            dispatch({
+                type:"ADD_ENROLLMENT",
+                payload:data
+            })            
+            messageApi.success("Enrolled successfully");
+            //Refresh course data
+            const updated = await coursesApi.getById(Number(courseId));
+            setCourse(updated);
+
+        } catch (error: any) {
+            messageApi.error(error);
+        } finally {
+            setEnrollingId(null);
+        }
+    };
+
+    const isEnrolled = (sectionId: number) => state.profile?.enrollments.some(e => e.section.id === sectionId);
+    const isFull = (section: SectionDto) => section.enrolledCount >= section.capacity;
+    const canEnroll = (section: SectionDto) =>  !isEnrolled(section.id) && !isFull(section);
+
     const columns = [
     {
       title: "Teacher",
@@ -52,7 +83,7 @@ export default function CourseDetails()
       dataIndex: "classroomName"
     },
     {
-      title: "Availabe City",
+      title: "Availabe Seats",
       render: (_: any, record: SectionDto) =>
         <Tag color={record.availableSeats === 0 ? "red" : "green"}>
             {record.availableSeats} seats left
@@ -73,11 +104,16 @@ export default function CourseDetails()
     {
       title: "Action",
       render: (_: any, record: SectionDto) => {
-        const full = fullCheck(record);
+        
 
         return (
-          <Button type="primary" disabled={full}>
-            {full ? "Full" : "Enroll"}
+          <Button
+                type="primary"
+                disabled={!canEnroll(record)}
+                loading={enrollingId === record.id}
+                onClick={() => handleEnroll(record.id)}
+          >
+              {isEnrolled(record.id) ? "Enrolled" : isFull(record) ? "Full" : "Enroll"}
           </Button>
         );
       }
@@ -87,6 +123,7 @@ export default function CourseDetails()
 
   return (
    <div>
+        {messageContextHolder}
         <Button onClick={() => navigate(-1)}><ArrowLeftOutlined />Back </Button>
         <Card>
             <h2>{course.code} - {course.name}</h2>
@@ -117,30 +154,35 @@ export default function CourseDetails()
             {isMobile && course?.sections && (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {course.sections.map((section) => {
-                const full = fullCheck(section);
 
                 return (
                     <Card key={section.id} title={section.teacherName} bordered>
-                    <p>{section.classroomName}</p>
+                        <p>{section.classroomName}</p>
 
-                    <p>
-                        Available Seats:{" "}
-                        <Tag color={section.availableSeats === 0 ? "red" : "green"}>
-                        {section.availableSeats} seats left
-                        </Tag>
-                    </p>
+                        <p>
+                            Available Seats:{" "}
+                            <Tag color={section.availableSeats === 0 ? "red" : "green"}>
+                            {section.availableSeats} seats left
+                            </Tag>
+                        </p>
 
-                    <div style={{ marginBottom: 10 }}>
-                        {section.timeSlots.map((t, i) => (
-                        <Tag key={i}>
-                            {t}
-                        </Tag>
-                        ))}
-                    </div>
+                        <div style={{ marginBottom: 10 }}>
+                            {section.timeSlots.map((t, i) => (
+                            <Tag key={i}>
+                                {t}
+                            </Tag>
+                            ))}
+                        </div>
 
-                    <Button type="primary" disabled={full} block>
-                        {full ? "Full" : "Enroll"}
-                    </Button>
+                        <Button
+                            type="primary"
+                            disabled={!canEnroll(section)}
+                            loading={enrollingId === section.id}
+                            onClick={() => handleEnroll(section.id)}
+                            block
+                        >
+                            {  isEnrolled(section.id) ? "Enrolled": isFull(section) ? "Full" : "Enroll"}
+                        </Button>
                     </Card>
                 );
                 })}
@@ -151,10 +193,10 @@ export default function CourseDetails()
             {!isMobile && course?.sections && (
             <Card title="Available Sections">
                 <Table
-                rowKey="id"
-                dataSource={course.sections}
-                columns={columns}
-                pagination={false}
+                    rowKey="id"
+                    dataSource={course.sections}
+                    columns={columns}
+                    pagination={false}
                 />
             </Card>
             )}

@@ -28,7 +28,7 @@ public class CourseController
   {
     try
     {
-      Result<List<Course>> result = courseService.getCourses(grade, semesterOrder);
+      Result<List<CourseDetailsDto>> result = courseService.getCourses(grade, semesterOrder);
       if(!result.isSuccess())
       {
         return new ResponseEntity<>(
@@ -38,39 +38,18 @@ public class CourseController
 
       return ResponseEntity
         .ok()
-        .body(ApiResponse.success(
-          result
-            .getData()
-            .stream()
-            .map(course -> new CourseDetailsDto(
-              course.getId(),
-              course.getCode(),
-              course.getName(),
-              course.getDescription(),
-              course.getCredits(),
-              course.getHoursPerWeek(),
-              course.getSpecialization().getId(),
-              course.getPrerequisite() != null ? course.getPrerequisite().getId():null,
-              course.getPrerequisite() != null ? course.getPrerequisite().getName():null,
-              course.getCourseType(),
-              course.getGradeLevelMin(),
-              course.getGradeLevelMax(),
-              course.getSemesterOrder(),
-              new ArrayList<>()
-            )).toList(),200
-        ));
+        .body(ApiResponse.success(result.getData(),200));
     }
     catch (Exception exception)
     {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.failure(Constant.INTERNAL_SERVER_ERROR_MESSAGE,500));
     }
-
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<CourseDetailsDto>> getCourseDetails(@PathVariable Long id) {
-
+  public ResponseEntity<ApiResponse<CourseDetailsDto>> getCourseDetails(@PathVariable Long id)
+  {
     Result<CourseDetailsDto> result = courseService.getCourseDetails(id);
 
     if (!result.isSuccess()) {

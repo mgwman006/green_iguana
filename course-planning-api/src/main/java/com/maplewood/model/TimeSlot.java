@@ -46,4 +46,9 @@ public class TimeSlot
     }
     return this.getStartHour() < object.getEndHour() && object.getStartHour() < this.getEndHour();
   }
+
+  public String toString()
+  {
+    return day + "-" + startHour + "-" + endHour;
+  }
 }

@@ -15,6 +15,30 @@ export const studentReducer = (state: StudentState, action: StudentAction): Stud
     case "LOGOUT":
       return { profile: null, loading: false, error: null };
 
+    case "UPDATE_ENROLLMENTS":
+      return {
+      ...state,
+        profile: state.profile
+          ? {
+              ...state.profile,
+              enrollments: action.payload
+            }:null
+      };
+
+    case "ADD_ENROLLMENT":
+      if (!state.profile) return state;
+
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          enrollments: [
+            ...(state.profile.enrollments || []),
+            action.payload
+          ]
+        }
+      };
+    
     default:
       return state;
   }

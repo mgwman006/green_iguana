@@ -21,7 +21,7 @@ public class StudentController
   private final StudentService studentService;
 
   @GetMapping("{id}/profile")
-  public ResponseEntity<ApiResponse<StudentProfileDto>> getUser(@PathVariable Long id)
+  public ResponseEntity<ApiResponse<StudentProfileDto>> getStudent(@PathVariable Long id)
   {
     try
     {

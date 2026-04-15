@@ -9,5 +9,6 @@ public record SectionDto(
   int capacity,
   int enrolledCount,
   int availableSeats,
+  String courseName,
   List<String> timeSlots
-) {}
+) { }

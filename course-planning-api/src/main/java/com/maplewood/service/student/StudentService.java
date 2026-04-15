@@ -1,19 +1,16 @@
 package com.maplewood.service.student;
 
-import com.maplewood.dto.response.CourseDetailsDto;
-import com.maplewood.dto.response.CourseHistoryDto;
-import com.maplewood.dto.response.StudentProfileDto;
-import com.maplewood.model.Course;
-import com.maplewood.model.Student;
-import com.maplewood.model.StudentCourseHistory;
+import com.maplewood.dto.response.*;
+import com.maplewood.model.*;
 import com.maplewood.repository.CourseRepository;
+import com.maplewood.repository.EnrollmentRepository;
 import com.maplewood.repository.StudentCourseHistoryRepository;
 import com.maplewood.repository.StudentRepository;
+import com.maplewood.service.enrollment.EnrollmentService;
 import com.maplewood.util.Constant;
 import com.maplewood.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +22,8 @@ public class StudentService
   private final StudentRepository studentRepository;
   private final StudentCourseHistoryRepository historyRepository;
   private final CourseRepository courseRepository;
+  private final EnrollmentRepository enrollmentRepository;
+  private final EnrollmentService enrollmentService;
 
   public Result<Student> findById(Long studentId)
   {
@@ -39,7 +38,6 @@ public class StudentService
     {
       return Result.failure(exception.getMessage()) ;
     }
-
   }
 
   public Result<StudentProfileDto> getProfile(Long studentId)
@@ -53,6 +51,7 @@ public class StudentService
       }
       Student student = optionalStudent.get();
 
+      //Get Course Histories
       List<StudentCourseHistory> courseHistories = historyRepository.findByStudentId(studentId);
       List<CourseHistoryDto> courseHistoryDtoList = new ArrayList<>();
       for (StudentCourseHistory history : courseHistories)
@@ -71,6 +70,17 @@ public class StudentService
       double gpa = calculateGpa(courseHistories);
       double credits = calculateCredits(courseHistories);
 
+      //Get Enrollments
+      List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
+      List<EnrollmentResponseDto> enrollmentResponseDtoList = new ArrayList<>();
+      for (Enrollment enrollment : enrollments)
+      {
+        Section section = enrollment.getSection();
+        EnrollmentResponseDto enrollmentResponseDto = enrollmentService.map(enrollment,student,section);
+        enrollmentResponseDtoList.add(enrollmentResponseDto);
+      }
+
+
       return Result
         .success(
           Constant.SUCCESS,
@@ -82,7 +92,8 @@ public class StudentService
             student.getEmail(),
             gpa,
             credits,
-            courseHistoryDtoList
+            courseHistoryDtoList,
+            enrollmentResponseDtoList
           ));
     }
     catch (Exception exception)

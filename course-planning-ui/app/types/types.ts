@@ -11,6 +11,7 @@ export interface Course {
     max: number;
   };
 }
+
 export interface SectionDto {
   id: number;
   teacherName: string;
@@ -18,6 +19,7 @@ export interface SectionDto {
   capacity: number;
   enrolledCount: number;
   availableSeats: number;
+  courseName : string;
   timeSlots: string[];
 }
 
@@ -64,6 +66,7 @@ export interface StudentProfile extends Student {
   gpa: number;
   creditsEarned: number;
   courseHistory: CourseHistory[];
+  enrollments: Enrollment[]
 }
 
 export type StudentState = {
@@ -74,7 +77,7 @@ export type StudentState = {
 
 export interface Enrollment {
   id: number;
-  studentId: number;
+  section: SectionDto;
   courseId: number;
   semesterId: number;
   status: 'enrolled' | 'completed' | 'dropped';
@@ -95,4 +98,6 @@ export type StudentAction =
   | { type: "FETCH_START" }
   | { type: "FETCH_SUCCESS"; payload: StudentProfile }
   | { type: "FETCH_ERROR"; payload: string }
-  | { type: "LOGOUT" };
+  | { type: "LOGOUT" }
+  | { type: "UPDATE_ENROLLMENTS"; payload: Enrollment[]}
+  | { type: "ADD_ENROLLMENT"; payload: Enrollment };

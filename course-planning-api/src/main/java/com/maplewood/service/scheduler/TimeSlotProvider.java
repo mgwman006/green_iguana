@@ -68,9 +68,9 @@ public class TimeSlotProvider
     slots.add(timeSlot2);
     TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 9, 10);
     slots.add(timeSlot3);
-    TimeSlot timeSlot4 = new TimeSlot(WeekDay.TUE, 10, 11);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 9, 10);
     slots.add(timeSlot4);
-    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 10, 12);
+    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 9, 11);
     slots.add(timeSlot5);
     return slots;
   }
@@ -79,11 +79,11 @@ public class TimeSlotProvider
   {
     Set<TimeSlot> slots = new HashSet<>();
     // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 9, 10);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 10, 11);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.WED, 9, 10);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.WED, 10, 11);
     slots.add(timeSlot2);
-    TimeSlot timeSlot3 = new TimeSlot(WeekDay.FRI, 9, 10);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.FRI, 10, 11);
     slots.add(timeSlot3);
 
 
@@ -94,10 +94,16 @@ public class TimeSlotProvider
   {
     Set<TimeSlot> slots = new HashSet<>();
     // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.TUE, 10, 11);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.TUE, 9, 10);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.THU, 10, 11);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.THU, 9, 10);
     slots.add(timeSlot2);
+
+    // SECOND Pattern
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.TUE, 10, 11);
+    slots.add(timeSlot3);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 10, 11);
+    slots.add(timeSlot4);
 
     return slots;
   }
@@ -107,10 +113,10 @@ public class TimeSlotProvider
     Set<TimeSlot> slots = new HashSet<>();
 
     // Pattern 1 (morning spread)
-    slots.add(new TimeSlot(WeekDay.MON, 9, 10));
-    slots.add(new TimeSlot(WeekDay.TUE, 9, 10));
-    slots.add(new TimeSlot(WeekDay.WED, 9, 10));
-    slots.add(new TimeSlot(WeekDay.THU, 9, 10));
+    slots.add(new TimeSlot(WeekDay.MON, 11, 12));
+    slots.add(new TimeSlot(WeekDay.TUE, 11, 12));
+    slots.add(new TimeSlot(WeekDay.WED, 11, 12));
+    slots.add(new TimeSlot(WeekDay.THU, 11, 12));
 
     return slots;
   }

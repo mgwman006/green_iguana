@@ -22,7 +22,7 @@ import java.net.URI;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/enrollment")
+@RequestMapping("api/v1/enrollments")
 public class EnrollmentController
 {
   private final StudentService studentService;
@@ -31,8 +31,7 @@ public class EnrollmentController
 
 
   @PostMapping("/enroll")
-  public ResponseEntity<ApiResponse<EnrollmentResponseDto>> enroll(
-    @Valid @RequestBody EnrollmentRequestDto request)
+  public ResponseEntity<ApiResponse<EnrollmentResponseDto>> enroll(@Valid @RequestBody EnrollmentRequestDto request)
   {
     try
     {
@@ -56,7 +55,7 @@ public class EnrollmentController
           .body(ApiResponse.failure(sectionResult.getMessage(), 400));
       }
 
-      Result<Enrollment> enrollmentResult =
+      Result<EnrollmentResponseDto> enrollmentResult =
         enrollmentService.enroll(
           studentResult.getData(),
           sectionResult.getData()
@@ -68,18 +67,11 @@ public class EnrollmentController
           .body(ApiResponse.failure(enrollmentResult.getMessage(), 400));
       }
 
-      Enrollment enrollment = enrollmentResult.getData();
+      EnrollmentResponseDto enrollment = enrollmentResult.getData();
 
       return ResponseEntity
-        .created(new URI("/api/v1/enrollment/" + enrollment.getId()))
-        .body(ApiResponse.success(
-          new EnrollmentResponseDto(
-            enrollment.getId(),
-            enrollment.getSection().getId(),
-            enrollment.getStudent().getId(),
-            0L,
-            enrollment.getStatus().toString()
-          ),201
+        .created(new URI("/api/v1/enrollment/" + enrollment.id()))
+        .body(ApiResponse.success(enrollment,201
         ));
     }
     catch (Exception e)
