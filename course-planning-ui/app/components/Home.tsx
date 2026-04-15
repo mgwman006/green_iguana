@@ -32,6 +32,9 @@ export default function Home() {
   const browseCourse = () => {
     navigate("/courses");
   }
+   const goToEnrollment = () => {
+    navigate("/enrollments");
+  }
 
 
   const userItems: MenuProps['items'] = [
@@ -52,6 +55,11 @@ export default function Home() {
     },
     {
       key: '4',
+      label: 'Enrollments',
+      onClick: goToEnrollment,
+    },
+    {
+      key: '5',
       label: state.profile?'LogOut':'LogIn',
       onClick:logOut,
     }

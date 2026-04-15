@@ -10,7 +10,8 @@ public record StudentProfileDto(
   String email,
   double gpa,
   double creditsEarned,
-  List<CourseHistoryDto> courseHistory
+  List<CourseHistoryDto> courseHistory,
+  List<EnrollmentResponseDto> enrollments
 )
 {
 }

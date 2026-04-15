@@ -1,13 +1,14 @@
 package com.maplewood.service.enrollment;
 
+import com.maplewood.dto.response.EnrollmentResponseDto;
 import com.maplewood.model.*;
 import com.maplewood.repository.EnrollmentRepository;
+import com.maplewood.service.section.SectionService;
 import com.maplewood.util.Constant;
 import com.maplewood.util.Result;
 import com.maplewood.util.enums.EnrollmentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -17,9 +18,10 @@ public class EnrollmentService
 {
   private final EnrollmentRepository enrollmentRepository;
   private final EnrollmentValidationService enrollmentValidationService;
+  private final SectionService sectionService;
 
 
-  public Result<Enrollment> enroll(Student student, Section section)
+  public Result<EnrollmentResponseDto> enroll(Student student, Section section)
   {
     // validate FIRST
     Result<Boolean> validation = enrollmentValidationService.validate(student, section);
@@ -41,7 +43,24 @@ public class EnrollmentService
     enrollment.setStatus(EnrollmentStatus.ACTIVE);
     enrollment.setEnrolledAt(LocalDateTime.now());
 
-    Enrollment saved = enrollmentRepository.save(enrollment);
-    return Result.success(Constant.SUCCESS,saved);
+    enrollment = enrollmentRepository.save(enrollment);
+    student = enrollment.getStudent();
+    section = enrollment.getSection();
+    return Result.success(
+      Constant.SUCCESS,
+      map(enrollment,student,section)
+    );
+  }
+
+  public EnrollmentResponseDto map(Enrollment enrollment, Student student, Section section)
+  {
+    return
+      new EnrollmentResponseDto(
+        enrollment.getId(),
+        sectionService.map(section),
+        student.getId(),
+        0L,
+        enrollment.getStudent().getStatus()
+      );
   }
 }
