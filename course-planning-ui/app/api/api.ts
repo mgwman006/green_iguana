@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiResponse, StudentProfile } from '../types/types';
+import { ApiResponse, CourseDto, Enrollment, StudentProfile } from '../types/types';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -44,8 +44,17 @@ apiClient.interceptors.response.use(
 );
 
 export const coursesApi = {
-  getAll: () => apiClient.get('/courses'),
-  getById: (id: number) => apiClient.get(`/courses/${id}`),
+  getAll: async (grade?: number, semesterOrder?: number) => {
+    const res = await apiClient.get<ApiResponse<CourseDto[]>>("/courses", {
+      params: { grade, semesterOrder },
+    });
+
+    return handleResponse(res.data);
+  },
+  getById: async (id: number) => {
+    const res =  await apiClient.get<ApiResponse<CourseDto>>(`/courses/${id}`);
+    return handleResponse(res.data);
+  }
 };
 
 export const studentsApi = {
@@ -53,13 +62,16 @@ export const studentsApi = {
     const res = await apiClient.get<ApiResponse<StudentProfile>>(`/students/${id}/profile`);
     return handleResponse(res.data);
   },
-  
+
   getSchedule: (id: number) => apiClient.get(`/students/${id}/schedule`),
 };
 
 export const enrollmentsApi = {
-  enroll: (studentId: number, sectionId: number) =>
-    apiClient.post('/enrollments', { studentId, sectionId }),
+  enroll: async (studentId: number, sectionId: number) =>
+  {
+    const res = await apiClient.post<ApiResponse<Enrollment>>("/enrollments/enroll", {studentId, sectionId });
+    return handleResponse(res.data);
+  } 
 };
 
 export function handleResponse<T>(response: ApiResponse<T>): T {

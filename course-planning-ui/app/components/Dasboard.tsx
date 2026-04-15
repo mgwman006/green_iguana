@@ -1,4 +1,4 @@
-import { Avatar, Card, Col, Empty, Flex, Progress, Row, Statistic, Table, TableColumnsType } from "antd";
+import { Avatar, Card, Col, Empty, Flex, Progress, Row, Statistic, Table, TableColumnsType, Typography } from "antd";
 import { useStudent } from "../store/student/StudentContext";
 import {  useNavigate } from "react-router";
 import Meta from "antd/es/card/Meta";
@@ -50,9 +50,20 @@ export default function Dashboard()
             gutter={[16, 24]}
         >
             <Col className="gutter-row" xs={20} sm={20} lg={20} xl={20} xxl={20}>
-                <h2>{profile?.firstName} {profile?.lastName}</h2>
-                <p>Your way to graduation</p>
+
+                <Typography.Title level={3} style={{ margin: 0 }}>
+                    <Typography.Text>
+                        Welcome,
+                    </Typography.Text>
+                    {profile?.firstName} {profile?.lastName}
+                </Typography.Title>
+
+                <Typography.Text>
+                    Your path to graduation
+                </Typography.Text>
+
                 <Progress percent={progress} status="active" />
+
 
             </Col>
 

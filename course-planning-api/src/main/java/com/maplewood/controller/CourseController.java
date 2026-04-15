@@ -9,15 +9,14 @@ import com.maplewood.util.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/course")
+@RequestMapping("api/v1/courses")
 public class CourseController
 {
   private final CourseService courseService;
@@ -56,7 +55,8 @@ public class CourseController
               course.getCourseType(),
               course.getGradeLevelMin(),
               course.getGradeLevelMax(),
-              course.getSemesterOrder()
+              course.getSemesterOrder(),
+              new ArrayList<>()
             )).toList(),200
         ));
     }
@@ -66,5 +66,20 @@ public class CourseController
         .body(ApiResponse.failure(Constant.INTERNAL_SERVER_ERROR_MESSAGE,500));
     }
 
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<ApiResponse<CourseDetailsDto>> getCourseDetails(@PathVariable Long id) {
+
+    Result<CourseDetailsDto> result = courseService.getCourseDetails(id);
+
+    if (!result.isSuccess()) {
+      return ResponseEntity.badRequest()
+        .body(ApiResponse.failure(result.getMessage(), 400));
+    }
+
+    return ResponseEntity.ok(
+      ApiResponse.success(result.getData(), 200)
+    );
   }
 }

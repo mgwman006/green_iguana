@@ -6,6 +6,7 @@ public class Constant
   public static final String SUCCESS = "success";
   public static final String INTERNAL_SERVER_ERROR_MESSAGE = "Internal Server Error";
   public static final String BAD_REQUEST_MESSAGE = "Bad Request";
+  public static final int CLASS_ROOM_CAPACITY = 10;
 
   private Constant()
   {

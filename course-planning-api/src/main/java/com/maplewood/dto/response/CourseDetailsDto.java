@@ -1,5 +1,7 @@
 package com.maplewood.dto.response;
 
+import java.util.List;
+
 public record CourseDetailsDto(
   Long id,
   String code,
@@ -13,5 +15,6 @@ public record CourseDetailsDto(
   String courseType,
   int gradeLevelMin,
   int gradeLevelMax,
-  Integer semesterOrder
+  Integer semesterOrder,
+  List<SectionDto> sections
 ) {}

@@ -119,6 +119,7 @@ public class SectionGeneratorService {
       section.setCourse(course);
       section.setTeacher(selectedTeacher);
       section.setClassroom(selectedRoom);
+      section.setCapacity(selectedRoom.getCapacity());
 
       for (TimeSlot timeSlot : slots)
       {

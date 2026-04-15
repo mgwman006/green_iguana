@@ -5,6 +5,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { LikeOutlined, MenuOutlined, MessageOutlined, ShoppingCartOutlined, StarOutlined, MailOutlined, LogoutOutlined, SettingOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useStudent } from '../store/student/StudentContext';
+import { STUDENT_STORAGE_KEY } from '../utilities/constant';
 
 
 
@@ -14,18 +15,22 @@ export default function Home() {
   const { state, dispatch } = useStudent();
 
 
- useEffect(() => {
+  useEffect(() => {
         if (!state.profile) {
             navigate("/");
         }
-    }, [state.profile, navigate]);
+  }, [state.profile, navigate]);
 
   const goHome = () => {
     navigate("/");
   }
   const logOut = () => {
     dispatch({ type: "LOGOUT" });
+    localStorage.removeItem(STUDENT_STORAGE_KEY);
     navigate("/");
+  }
+  const browseCourse = () => {
+    navigate("/courses");
   }
 
 
@@ -42,6 +47,11 @@ export default function Home() {
     },
     {
       key: '3',
+      label: 'Browse Courses',
+      onClick:browseCourse,
+    },
+    {
+      key: '4',
       label: state.profile?'LogOut':'LogIn',
       onClick:logOut,
     }

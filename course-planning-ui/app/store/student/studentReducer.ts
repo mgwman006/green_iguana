@@ -1,10 +1,5 @@
-import { StudentProfile, StudentState } from "../../types/types";
+import { StudentAction, StudentState } from "../../types/types";
 
-export type StudentAction =
-  | { type: "FETCH_START" }
-  | { type: "FETCH_SUCCESS"; payload: StudentProfile }
-  | { type: "FETCH_ERROR"; payload: string }
-  | { type: "LOGOUT" };
 
 export const studentReducer = (state: StudentState, action: StudentAction): StudentState => {
   switch (action.type) {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined, UserOutlined } from '@ant-design/icons';
 import { useStudent } from "../store/student/StudentContext";
-import { fetchStudentProfile } from "../service/studentService";
+import { studentsApi } from "../api/api";
 
 
 
@@ -20,7 +20,14 @@ export default function LogIn()
         {
             return;
         }
-        await fetchStudentProfile(dispatch, studentId);
+        
+        dispatch({ type: "FETCH_START" });
+        try {
+            const profile = await studentsApi.getById(studentId);
+            dispatch({type: "FETCH_SUCCESS",payload: profile,});
+        } catch (err: any) {
+            dispatch({type: "FETCH_ERROR",payload: err.message || err,});
+        }
     }
 
     useEffect(() => {
@@ -64,9 +71,16 @@ export default function LogIn()
                                 rules={[
                                     { required: true, message: 'Student Id is rquired!' },
                                     {
-                                        type: "number",
-                                        min: 1,
-                                        message: "Please enter a valid Student ID",
+                                        validator: (_, value) => {
+                                            if (!value) return Promise.resolve();
+
+                                            const num = Number(value);
+                                            if (!isNaN(num) && num > 0) {
+                                            return Promise.resolve();
+                                            }
+
+                                            return Promise.reject("Please enter a valid Student ID");
+                                        },
                                     }
                                 ]}
                             >
