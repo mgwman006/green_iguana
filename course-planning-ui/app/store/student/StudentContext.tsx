@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { studentReducer } from "./studentReducer";
 import { StudentState } from "../../types/types";
+import { STUDENT_STORAGE_KEY } from "../../utilities/constant";
 
 type StudentContextType = {
   state: StudentState;
@@ -9,14 +10,43 @@ type StudentContextType = {
 
 const StudentContext = createContext<StudentContextType | undefined>(undefined);
 
-const initialState: StudentState = {
-  profile: null,
-  loading: false,
-  error: null,
+//load initial state from local storage
+const loadInitialState = (): StudentState => {
+  try {
+    const stored = localStorage.getItem(STUDENT_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return {
+        profile: parsed.profile,
+        loading: false,
+        error: null,
+      };
+    }
+  } catch (e) {
+    console.error("Failed to load state", e);
+  }
+
+  return {
+    profile: null,
+    loading: false,
+    error: null,
+  };
 };
 
 export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(studentReducer, initialState);
+  const [state, dispatch] = useReducer(studentReducer, undefined,loadInitialState);
+
+  useEffect(() => {
+    try {
+      if(state.profile)
+      {
+        localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(state));
+      }
+    } catch (e) {
+      console.error("Failed to save state", e);
+    }
+  }, [state.profile]);
+
 
   return (
     <StudentContext.Provider value={{ state, dispatch }}>

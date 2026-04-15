@@ -14,4 +14,6 @@ public interface SectionRepository extends JpaRepository<Section, Long>
   List<Section> findByClassroom(Classroom classroom);
 
   Section findByCourse(Course newCourse);
+
+  List<Section> findByCourseId(Long courseId);
 }

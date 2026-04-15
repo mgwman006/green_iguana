@@ -1,4 +1,3 @@
-// Example TypeScript types for the application
 
 export interface Course {
   id: number;
@@ -11,6 +10,38 @@ export interface Course {
     min: number;
     max: number;
   };
+}
+export interface SectionDto {
+  id: number;
+  teacherName: string;
+  classroomName: string;
+  capacity: number;
+  enrolledCount: number;
+  availableSeats: number;
+  timeSlots: string[];
+}
+
+export interface CourseDto {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  credits: number;
+  hoursPerWeek: number;
+
+  specializationId: number;
+
+  prerequisiteId: number | null;
+  prerequisiteName: string | null;
+
+  courseType: "core" | "elective";
+
+  gradeLevelMin: number;
+  gradeLevelMax: number;
+
+  semesterOrder: number;
+  sections: SectionDto[];
+
 }
 
 export interface Student {
@@ -59,3 +90,9 @@ export type ApiResponse<T> = {
   data: T;
   message?: string;
 };
+
+export type StudentAction =
+  | { type: "FETCH_START" }
+  | { type: "FETCH_SUCCESS"; payload: StudentProfile }
+  | { type: "FETCH_ERROR"; payload: string }
+  | { type: "LOGOUT" };

@@ -76,7 +76,9 @@ public class EnrollmentController
           new EnrollmentResponseDto(
             enrollment.getId(),
             enrollment.getSection().getId(),
-            enrollment.getStudent().getId()
+            enrollment.getStudent().getId(),
+            0L,
+            enrollment.getStatus().toString()
           ),201
         ));
     }
