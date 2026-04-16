@@ -1,6 +1,42 @@
 # 🧭 Maplewood Course Planning App
 
-This project is a **monorepo** containing both Backend and Frontend applications.
+A full-stack **course enrollment and planning system** built as a **monorepo** containing a Spring Boot backend and React frontend.
+
+The application demonstrates core academic scheduling workflows such as:
+
+- Student enrollment
+- Course prerequisite validation
+- Schedule conflict detection
+- Maximum course load enforcement
+- Real-time frontend/backend integration
+
+---
+
+## 🌐 Live Demo
+
+This project can be run locally using Docker.
+
+```bash
+docker compose up --build
+```
+
+Then access:
+
+| Service | URL |
+|--------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8080 |
+
+---
+
+## ✨ Key Features
+
+- 📚 Student course enrollment
+- ⛔ Prerequisite enforcement
+- 🕒 Schedule overlap detection
+- 📈 Maximum course registration limits
+- 🔄 REST API integration
+- 🐳 One-command local setup via Docker Compose
 
 ---
 
@@ -30,7 +66,7 @@ This project is a **monorepo** containing both Backend and Frontend applications
 │   └── tsconfig.json
 │
 ├── docker-compose.yml              # Multi-container setup
-├── maplewood_school.sqlite         # SQLite database file
+├── maplewood_school.sqlite         # SQLite database
 └── README.md
 ```
 
@@ -38,24 +74,251 @@ This project is a **monorepo** containing both Backend and Frontend applications
 
 ## 🧰 Tech Stack
 
-| Layer        | Technology |
-|-------------|------------|
-| Frontend    | React (Vite), TypeScript |
-| Backend     | Spring Boot, Spring Web, JPA |
-| Database    | SQLite (file-based) |
-| Build Tools | Maven, Vite |
-| DevOps      | Docker, Docker Compose |
+| Layer | Technology |
+|------|------------|
+| Frontend | React, Vite, TypeScript |
+| Backend | Spring Boot, Spring Web, Spring Data JPA |
+| Database | SQLite |
+| Build Tools | Maven, npm |
+| DevOps | Docker, Docker Compose |
 
 ---
 
-## 📦 Prerequisites
+## 🏗️ Architecture
 
-Make sure you have installed:
+```text
+Browser
+   ↓
+React Frontend (localhost:3000)
+   ↓
+Spring Boot REST API (localhost:8080)
+   ↓
+SQLite Database
+```
+
+---
+
+## 🧠 Scheduling & Resource Allocation Strategy
+
+The core challenge was not only student enrollment validation, but helping the school efficiently manage **limited operational resources** before registration begins.
+
+These resources include:
+
+- teacher availability
+- classroom availability
+- teacher subject expertise
+- course workload hours
+- timetable collisions
+- student demand across courses
+
+---
+
+## 🎯 Core Design Philosophy
+
+Instead of solving conflicts only at registration time, the system uses a **two-phase planning model**:
+
+```text
+Phase 1: Administrative Schedule Planning
+Phase 2: Student Enrollment Validation
+```
+
+This mirrors how real schools operate.
+
+---
+
+## 🏗️ Phase 1: Preconfigured Academic Scheduling
+
+Before students register, administrators define available course sections for the term.
+
+Each section is created using four core constraints:
+
+### 1. Teacher Availability
+
+Teachers can only be assigned to times they are available.
+
+Example:
+
+```text
+Mr. Smith available:
+Mon–Fri, 08:00–13:00
+```
+
+Unavailable slots are excluded during scheduling.
+
+---
+
+### 2. Teacher Skill Set / Subject Qualification
+
+Teachers are matched only to courses they are qualified to teach.
+
+Example:
+
+```text
+Ms. Johnson:
+✔ Chemistry
+✔ Biology
+✘ Mathematics
+```
+
+This prevents invalid resource assignment.
+
+---
+
+### 3. Room Availability
+
+A classroom cannot host multiple sections at the same time.
+
+Example:
+
+```text
+Room A101
+Mon 10:00–11:00 already occupied
+```
+
+That slot becomes unavailable for other sections.
+
+---
+
+### 4. Course Workload Hours (Scheduling Driver)
+
+Each course has a required number of teaching hours per week, and this was a major guide when planning timeslots.
+
+Examples:
+
+```text
+Algebra I = 5 hours/week
+Chemistry I = 3 hours/week
+Programming Basics = 4 hours/week
+```
+
+The scheduling engine uses workload hours to determine:
+
+- number of sessions required
+- duration of each session
+- weekly timetable placement
+- efficient use of teacher time
+- efficient use of classrooms
+
+Example:
+
+```text
+Course requires 5 hours/week
+
+Possible allocation:
+Mon 09:00–10:00
+Tue 09:00–10:00
+Wed 09:00–10:00
+Thu 09:00–10:00
+Fri 09:00–10:00
+```
+
+This ensures the timetable reflects real academic workload requirements.
+
+---
+
+## 📚 Output of Phase 1
+
+The result is a set of ready-to-enroll course sections such as:
+
+```text
+Algebra I - Section A
+Teacher: Mr. Brown
+Room: B201
+Mon/Wed/Fri 09:00–10:00
+
+Chemistry I - Section B
+Teacher: Ms. Johnson
+Room: Lab 1
+Tue/Thu 11:00–12:30
+```
+
+Students register into these prebuilt sections rather than raw courses.
+
+---
+
+## 🧪 Phase 2: Student Enrollment Validation
+
+Once sections exist, student registration becomes simpler and faster.
+
+The system validates:
+
+- prerequisite completion
+- duplicate enrollment
+- student schedule conflicts
+- maximum course load
+- seat availability
+
+Because operational constraints were already solved earlier, student enrollment becomes efficient and predictable.
+
+---
+
+## ⚡ Why This Approach Is Effective
+
+### Separation of Concerns
+
+Administrative planning and student enrollment solve different problems.
+
+By separating them:
+
+- scheduling remains manageable
+- enrollment becomes faster
+- fewer runtime conflicts occur
+
+---
+
+### Better Resource Utilization
+
+The school can maximize use of:
+
+- teachers
+- classrooms
+- available timetable slots
+- weekly teaching capacity
+
+---
+
+### Scalable Model
+
+This design can grow into advanced optimization later:
+
+- auto timetable generation
+- waitlists
+- teacher workload balancing
+- peak demand forecasting
+- room capacity optimization
+
+---
+
+## 🧠 Engineering Perspective
+
+Rather than treating scheduling as only a student problem, the system models scheduling first as an **institutional resource allocation problem**, guided by workload hours and operational availability, then as an enrollment workflow.
+
+This significantly reduces downstream conflicts.
+
+---
+
+## 🔮 Future Enhancements
+
+Given more time, the planning engine could evolve into:
+
+- timetable optimization algorithm
+- constraint satisfaction solver
+- teacher workload balancing
+- preferred timeslot matching
+- AI-assisted schedule generation
+- demand-based section creation
+- And of course unit tests(lol) , I had limited time and hence the focus was only functionality
+```
+## 🚀 Getting Started
+
+## Prerequisites
+
+Install:
 
 - Docker
 - Docker Compose
 
-### 🔍 Verify installation
+Verify:
 
 ```bash
 docker --version
@@ -64,70 +327,44 @@ docker compose version
 
 ---
 
-## ▶️ Running the Application
+## Run Locally
 
-### 1. Navigate to the project root
+### 1. Clone Repository
 
 ```bash
+git clone https://github.com/mgwman006/green_iguana.git
 cd green_iguana
 ```
 
 ---
 
-### 2. Ensure SQLite database exists
-
-The database file must be in the project root:
-
-```text
-maplewood_school.sqlite
-```
-
-If it does not exist:
+### 2. Ensure Database Exists
 
 ```bash
 touch maplewood_school.sqlite
-```
-
-(Optional) Fix permissions:
-
-```bash
 chmod 666 maplewood_school.sqlite
 ```
 
 ---
 
-### 3. Start the application
+### 3. Start Application
 
 ```bash
 docker compose up --build
 ```
 
-This will:
+---
 
-- Build backend (Spring Boot)
-- Build frontend (React + Vite)
-- Start both containers
+### 4. Open Application
+
+| Service | URL |
+|--------|-----|
+| Frontend | http://localhost:3000 |
+| Backend | http://localhost:8080 |
 
 ---
 
-### 4. Access the application
-
-| Service   | URL                     |
-|----------|--------------------------|
-| Frontend | http://localhost:3000   |
-| Backend  | http://localhost:8080   |
-
----
-
-## 🔄 Stopping the Application
-
-Stop running containers:
-
-```text
-Ctrl + C
-```
-
-Or:
+## 🛑 Stop Application
 
 ```bash
 docker compose down
@@ -137,63 +374,171 @@ docker compose down
 
 ## 🧪 Useful Commands
 
-### View running containers
+### Running Containers
+
 ```bash
 docker ps
 ```
 
-### View logs (all services)
+### View Logs
+
 ```bash
 docker compose logs -f
 ```
 
-### Frontend logs only
-```bash
-docker logs maplewood-frontend
-```
+### Backend Logs
 
-### Backend logs only
 ```bash
 docker logs maplewood-backend
 ```
 
-### Rebuild after changes
+### Frontend Logs
+
+```bash
+docker logs maplewood-frontend
+```
+
+### Rebuild
+
 ```bash
 docker compose up --build
 ```
 
 ---
 
-## 🧠 Notes
+## 🧠 Design Decisions
 
-- Frontend communicates with backend via:
-  ```text
-  http://localhost:8080
-  ```
+### Monorepo Structure
 
-- Backend uses SQLite database mounted from host:
-  ```text
-  ./maplewood_school.sqlite → /data/maplewood_school.sqlite
-  ```
+Frontend and backend are maintained in one repository to simplify:
 
-- Spring profile `docker` is active when running via Docker Compose
+- onboarding
+- local development
+- version consistency
+- deployment coordination
+
+### SQLite Database
+
+SQLite was selected because:
+
+- zero external setup required
+- lightweight
+- ideal for demos and coding challenges
+
+### Docker Compose
+
+Used to provide a single-command startup experience and eliminate machine-specific setup issues.
+
+---
+
+## 📊 Business Rules Implemented
+
+### Enrollment Rules
+
+- Students may enroll in a maximum of **5 courses**
+- Prerequisites must be completed first
+- Schedule conflicts are not allowed
+- Duplicate enrollment is prevented
+
+---
+
+## 📋 Testing Scenarios
+
+### ✅ Scenario 1: Valid Enrollment
+
+Student **Joseph Young** (`student_id: 101`) enrolls in **Chemistry I**
+
+Checks:
+
+- prerequisite satisfied
+- no schedule conflict
+- below 5-course limit
+
+Result:
+
+```text
+Enrollment successful
+```
+
+---
+
+### ❌ Scenario 2: Missing Prerequisite
+
+Student attempts **English II: Literature**
+
+Required:
+
+```text
+English I: Composition
+```
+
+Result:
+
+```text
+Enrollment blocked
+```
+
+---
+
+### ❌ Scenario 3: Schedule Conflict
+
+Student already enrolled in:
+
+```text
+Chemistry I (12:00–13:00)
+```
+
+Attempts:
+
+```text
+Algebra I (12:00–13:00)
+```
+
+Result:
+
+```text
+Enrollment blocked
+```
+
+---
+
+### ❌ Scenario 4: Maximum Course Limit
+
+Student attempts 6th course.
+
+Result:
+
+```text
+Enrollment blocked
+```
+
+---
+
+## Example 5 Valid Courses for Joseph Young (Student Number 101)
+
+- World History
+- Chemistry I
+- Algebra I
+- Intro to Programming
+- Journalism
 
 ---
 
 ## ⚠️ Troubleshooting
 
-### Backend not starting
+### Backend Not Starting
+
 ```bash
 docker logs maplewood-backend
 ```
 
-### Frontend not loading
+### Frontend Not Loading
+
 ```bash
 docker logs maplewood-frontend
 ```
 
-### Database issues
-Ensure file exists and has correct permissions:
+### Database Issues
 
 ```bash
 chmod 666 maplewood_school.sqlite
@@ -201,58 +546,24 @@ chmod 666 maplewood_school.sqlite
 
 ---
 
-## 🏗️ Architecture Overview
 
-```text
-Browser (localhost:3000)
-        ↓
-React (Vite frontend)
-        ↓
-Spring Boot API (localhost:8080)
-        ↓
-SQLite database (file)
-```
+
+## 👨‍💻 Engineering Notes
+
+This project emphasizes:
+
+- clean separation of concerns
+- maintainable code structure
+- real-world validation logic
+- production-style containerization
+- developer experience
 
 ---
 
 ## 🎯 Quick Start
 
-Run everything with:
-
 ```bash
 docker compose up --build
 ```
 
-🚀 Done — application is ready.
-
-
-## 📊 Testing Scenarios For Existing Data
-
-### Scenario 1: Valid Enrollment
-- Student "Joseph Young" (Grade 10, student_id: 101) wants to enroll in "Chemistry I"
-- System checks: Has she passed "Biology I"? (Yes)
-- System checks: Does it conflict with her current schedule? (No)
-- System checks: Is she at/below 5 courses? (Currently has 0)
-- Result: ✅ Enrollment succeeds
-
-### Scenario 2: Prerequisite Violation
-- Student "Joseph Young" (Grade 10, student_id: 101) wants to enroll in "English II: Literature"
-- System checks: Has he passed "English I: Composition"? (No record)
-- Result: ❌ Enrollment blocked - missing prerequisite
-
-### Scenario 3: Time Conflict
-- Student "Joseph Young" (Grade 10, student_id: 101) attempts to add "Algebra I" (Mon/Tue/Wed/Thus/Fri 12:00-13:00)
-- Current schedule includes "Chemistry I" (Mon/Tue/Wed/Thus/Fri 12:00-13:00)
-- Result: ❌ Enrollment blocked - schedule conflict
-  
-### Scenario 4: Course Limit 
-- Due to resource this scenario can only be tested if you reduce class capacity to 4 or lower
-- Student already enrolled in 5 courses attempts to add a 6th
-- Result: ❌ Enrollment blocked - maximum courses exceeded
-
-### 5 Courses Tha can registered by Joseph Young
-- World History
-- Chemistry I
-- Algebra I
-- Intro to Programming
-- Journalism
+Application ready 🚀
