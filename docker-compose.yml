@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  maplewood-backend:
+    build:
+      context: ./course-planning-api
+      dockerfile: Dockerfile
+    container_name: maplewood-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    volumes:
+      - ./maplewood_school.sqlite:/data/maplewood_school.sqlite
+    networks:
+      - app-network
+  maplewood-frontend:
+    build:
+      context: ./course-planning-ui
+      dockerfile: Dockerfile
+    container_name: maplewood-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:8080
+    depends_on:
+      - maplewood-backend
+    networks:
+      - app-network
+networks:
+  app-network:

@@ -35,23 +35,23 @@ public class EnrollmentValidationService
 
       if (!isValidGradeLevel(student, course))
       {
-        return Result.failure("Course not allowed for student's grade level");
+        return Result.failure("Enrollment blocked - Not Valid GradeLevel");
       }
       if (!hasCapacity(section))
       {
-        return Result.failure("Section is full");
+        return Result.failure("Enrollment blocked - maximum courses exceeded");
       }
       if (isTimeConflicts(student, section.getTimeSlots()))
       {
-        return Result.failure("Course conflicts with existing schedule");
+        return Result.failure("Enrollment blocked - schedule conflict");
       }
 
       if (!hasValidPrerequisites_v2(student, course))
       {
-        return Result.failure("Missing required prerequisite");
+        return Result.failure("Enrollment blocked - missing prerequisite");
       }
 
-      return Result.success("success",Boolean.TRUE);
+      return Result.success("Enrollment succeeds",Boolean.TRUE);
     }//try
     catch (Exception exception)
     {

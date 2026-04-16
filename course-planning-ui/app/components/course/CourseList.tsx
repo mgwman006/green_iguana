@@ -37,6 +37,7 @@ export default function CourseList()
         { title: "Code", dataIndex: "code" },
         { title: "Name", dataIndex: "name" },
         { title: "Credits", dataIndex: "credits" },
+        { title: "Hours Per Week", dataIndex: "hoursPerWeek"},
         {
             title: "Grade",
             render: (r: CourseDto) => `${r.gradeLevelMin}-${r.gradeLevelMax}`,
@@ -92,6 +93,7 @@ export default function CourseList()
                 <h3>{course.name}</h3>
                 <p><strong>Code:</strong> {course.code}</p>
                 <p><strong>Credits:</strong> {course.credits}</p>
+                <p><strong>Hours Per Week:</strong> {course.hoursPerWeek}</p>
                 <p>
                   <strong>Grade:</strong>{" "}
                   {course.gradeLevelMin} - {course.gradeLevelMax}
