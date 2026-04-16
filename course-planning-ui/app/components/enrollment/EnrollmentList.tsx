@@ -88,9 +88,6 @@ export default function EnrollmentList()
                 />
             </Card>
             )}
-            {enrollments.length === 0 && (
-                <Empty description="No enrollments yet" />                    
-            )}
         </div>
     );
 }

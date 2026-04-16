@@ -39,6 +39,7 @@ public class TimeSlotProvider
     if (hours == 4)
     {
       patterns.add(getTimeSlotsForFourHoursWorkLoad());
+      patterns.add(getTimeSlotsForFourHoursWorkLoad2());
       return patterns;
     }
 
@@ -51,6 +52,7 @@ public class TimeSlotProvider
     if (hours == 6)
     {
       patterns.add(getTimeSlotsForSixHoursWorkLoad());
+      patterns.add(getTimeSlotsForSixHoursWorkLoad2());
       return patterns;
     }
 
@@ -62,28 +64,86 @@ public class TimeSlotProvider
     Set<TimeSlot> slots = new HashSet<>();
 
     // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 9, 10);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 12, 13);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 9, 10);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 12, 13);
     slots.add(timeSlot2);
-    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 9, 10);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 12, 13);
     slots.add(timeSlot3);
-    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 9, 10);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 12, 13);
     slots.add(timeSlot4);
-    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 9, 11);
+    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 12, 14);
     slots.add(timeSlot5);
     return slots;
   }
+
+  private static Set<TimeSlot> getTimeSlotsForSixHoursWorkLoad2()
+  {
+    Set<TimeSlot> slots = new HashSet<>();
+
+    // First Pattern
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 14, 15);
+    slots.add(timeSlot1);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 14, 15);
+    slots.add(timeSlot2);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 14, 15);
+    slots.add(timeSlot3);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 14, 15);
+    slots.add(timeSlot4);
+    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 14, 16);
+    slots.add(timeSlot5);
+    return slots;
+  }
+
+  private static Set<TimeSlot> getTimeSlotsForFiveHoursWorkLoad()
+  {
+    Set<TimeSlot> slots = new HashSet<>();
+
+    slots.add(new TimeSlot(WeekDay.MON, 10, 11));
+    slots.add(new TimeSlot(WeekDay.TUE, 10, 11));
+    slots.add(new TimeSlot(WeekDay.WED, 10, 11));
+    slots.add(new TimeSlot(WeekDay.THU, 10, 11));
+    slots.add(new TimeSlot(WeekDay.FRI, 10, 11));
+
+    return slots;
+  }
+
+  private static Set<TimeSlot> getTimeSlotsForFourHoursWorkLoad()
+  {
+    Set<TimeSlot> slots = new HashSet<>();
+
+    // Pattern 1 (morning spread)
+    slots.add(new TimeSlot(WeekDay.MON, 9, 10));
+    slots.add(new TimeSlot(WeekDay.TUE, 9, 10));
+    slots.add(new TimeSlot(WeekDay.WED, 9, 10));
+    slots.add(new TimeSlot(WeekDay.THU, 9, 10));
+
+    return slots;
+  }
+  private static Set<TimeSlot> getTimeSlotsForFourHoursWorkLoad2()
+  {
+    Set<TimeSlot> slots = new HashSet<>();
+
+    // Pattern 2 (morning spread)
+    slots.add(new TimeSlot(WeekDay.MON, 11, 12));
+    slots.add(new TimeSlot(WeekDay.TUE, 11, 12));
+    slots.add(new TimeSlot(WeekDay.WED, 11, 12));
+    slots.add(new TimeSlot(WeekDay.THU, 11, 12));
+
+    return slots;
+  }
+
+
 
   private static Set<TimeSlot> getTimeSlotsForThreeHoursWorkLoad()
   {
     Set<TimeSlot> slots = new HashSet<>();
     // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 10, 11);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 8, 9);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.WED, 10, 11);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.WED, 8, 9);
     slots.add(timeSlot2);
-    TimeSlot timeSlot3 = new TimeSlot(WeekDay.FRI, 10, 11);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.FRI, 8, 9);
     slots.add(timeSlot3);
 
 
@@ -108,29 +168,7 @@ public class TimeSlotProvider
     return slots;
   }
 
-  private static Set<TimeSlot> getTimeSlotsForFourHoursWorkLoad()
-  {
-    Set<TimeSlot> slots = new HashSet<>();
 
-    // Pattern 1 (morning spread)
-    slots.add(new TimeSlot(WeekDay.MON, 11, 12));
-    slots.add(new TimeSlot(WeekDay.TUE, 11, 12));
-    slots.add(new TimeSlot(WeekDay.WED, 11, 12));
-    slots.add(new TimeSlot(WeekDay.THU, 11, 12));
 
-    return slots;
-  }
 
-  private static Set<TimeSlot> getTimeSlotsForFiveHoursWorkLoad()
-  {
-    Set<TimeSlot> slots = new HashSet<>();
-
-    slots.add(new TimeSlot(WeekDay.MON, 9, 10));
-    slots.add(new TimeSlot(WeekDay.TUE, 9, 10));
-    slots.add(new TimeSlot(WeekDay.WED, 9, 10));
-    slots.add(new TimeSlot(WeekDay.THU, 9, 10));
-    slots.add(new TimeSlot(WeekDay.FRI, 9, 10));
-
-    return slots;
-  }
 }

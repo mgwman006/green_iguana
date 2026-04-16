@@ -47,17 +47,25 @@ public class SectionGeneratorService {
   public void generateAllSections()
   {
 
+    Optional<Semester> optionalSemester = semesterRepository.findActiveSemester();
+    if (optionalSemester.isEmpty())
+    {
+      throw new IllegalStateException("Semester not found");
+    }
+    Semester activeSemester = optionalSemester.get();
     List<Classroom> rooms = classroomRepository.findAll();
     List<Teacher> teachers = teacherRepository.findAll();
     List<Course> courses = courseRepository.findAll();
 
-    log.debug("Size={}", courses.size());
     // Initialize availability state
     roomAvailabilityService.initialize(rooms);
     teacherAvailabilityService.initialize(teachers);
     for (Course course : courses)
     {
-      generateSectionsForCourse(course, teachers, rooms);
+      if (course.getSemesterOrder() == activeSemester.getOrderInYear())
+      {
+        generateSectionsForCourse(course, teachers, rooms);
+      }
     }
   }
 
