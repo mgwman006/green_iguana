@@ -1,23 +1,9 @@
 import axios from 'axios';
-import { ApiResponse, CourseDto, Enrollment, StudentProfile } from '../types/types';
+import {ApiResponse, CourseDto, Enrollment, SemesterDto, StudentProfile} from '../types/types';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const apiClient = axios.create({
-  baseURL: `${apiUrl}/api/v1`, 
-  headers: {
-    'Content-Type': 'application/json',
-  } ,
-});
-
-export const puplicApi = axios.create({
-  baseURL: `${apiUrl}/api/v1`, 
-  headers: {
-    'Content-Type': 'application/json',
-  } ,
-});
-
-export const privateApi = axios.create({
   baseURL: `${apiUrl}/api/v1`, 
   headers: {
     'Content-Type': 'application/json',
@@ -72,6 +58,14 @@ export const enrollmentsApi = {
     const res = await apiClient.post<ApiResponse<Enrollment>>("/enrollments/enroll", {studentId, sectionId });
     return handleResponse(res.data);
   } 
+};
+
+export const semesterApi = {
+  getActiveSemester: async () =>
+  {
+    const res = await apiClient.get<ApiResponse<SemesterDto>>("/semesters");
+    return handleResponse(res.data);
+  }
 };
 
 export function handleResponse<T>(response: ApiResponse<T>): T {

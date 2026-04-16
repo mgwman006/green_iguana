@@ -6,6 +6,7 @@ import com.maplewood.repository.EnrollmentRepository;
 import com.maplewood.repository.StudentCourseHistoryRepository;
 import com.maplewood.util.Constant;
 import com.maplewood.util.Result;
+import com.maplewood.util.error.EnrollmentValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -31,28 +32,28 @@ public class EnrollmentValidationService
       Course course = section.getCourse();
       if (ObjectUtils.isEmpty(course))
       {
-        return Result.failure("Course not found");
+        return Result.failure(Constant.COURSE_NOT_FOUND);
       }
 
       if (!isValidGradeLevel(student, course))
       {
-        return Result.failure("Enrollment blocked - Not Valid GradeLevel");
+        return Result.failure(EnrollmentValidationError.INVALID_GRADE_LEVEL);
       }
       if (!hasCapacity(student))
       {
-        return Result.failure("Enrollment blocked - maximum course limit reached");
+        return Result.failure(EnrollmentValidationError.MAXIMUM_COURSE_LIMIT_REACHED);
       }
       if (isTimeConflicts(student, section.getTimeSlots()))
       {
-        return Result.failure("Enrollment blocked - schedule conflict");
+        return Result.failure(EnrollmentValidationError.SCHEDULE_CONFLICT);
       }
 
       if (!hasValidPrerequisites_v2(student, course))
       {
-        return Result.failure("Enrollment blocked - missing prerequisite");
+        return Result.failure(EnrollmentValidationError.MISSING_PREREQUISITE);
       }
 
-      return Result.success("Enrollment succeeds",Boolean.TRUE);
+      return Result.success(Constant.ENROLLMENT_SUCCEDED,Boolean.TRUE);
     }//try
     catch (Exception exception)
     {

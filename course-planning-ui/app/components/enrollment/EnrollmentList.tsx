@@ -1,9 +1,6 @@
 import { useStudent } from "../../store/student/StudentContext";
-import { Card, Empty, Grid, Table, TableColumnsType, Tag } from "antd";
+import {Card, Grid, message, Table, TableColumnsType, Tag} from "antd";
 import { Enrollment } from "../../types/types";
-
-
-
 
 const { useBreakpoint } = Grid;
 
@@ -52,8 +49,11 @@ export default function EnrollmentList()
     const isMobile = !screens.md;
     const { state } = useStudent();
     const enrollments = state.profile?.enrollments || [];
+    const [messageApi, messageContextHolder] = message.useMessage();
+
     return (
         <div>
+            {messageContextHolder}
             {isMobile && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     {enrollments.map((e) => (

@@ -1,4 +1,14 @@
 
+export interface SemesterDto {
+    id:number;
+    name:string;
+    year:number;
+    orderInYear:number;
+    startDate:string;
+    endDate:string;
+    isActive: boolean
+}
+
 export interface Course {
   id: number;
   code: string;
