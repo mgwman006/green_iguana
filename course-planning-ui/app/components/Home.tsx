@@ -1,8 +1,7 @@
-import { Button, Col, Flex, Progress, Row,Image, Layout, Menu, Drawer, Typography, Avatar, notification, MenuProps, Dropdown, Space } from 'antd';
+import { Layout, Menu, Drawer, MenuProps} from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
-import { isMobile, isTablet, isBrowser } from 'react-device-detect';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { LikeOutlined, MenuOutlined, MessageOutlined, ShoppingCartOutlined, StarOutlined, MailOutlined, LogoutOutlined, SettingOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
+import { Outlet, useNavigate } from 'react-router-dom';
+import {  MenuOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useStudent } from '../store/student/StudentContext';
 import { STUDENT_STORAGE_KEY } from '../utilities/constant';
@@ -35,17 +34,21 @@ export default function Home() {
    const goToEnrollment = () => {
     navigate("/enrollments");
   }
+    const viewProfile = () => {
+        navigate("/profile");
+    }
 
 
   const userItems: MenuProps['items'] = [
     {
       key: '1',
-      label: 'My Account',
-      disabled: true,
+      label: 'My Profile',
+      disabled:true,
+      onClick: viewProfile
     },
     {
       key: '2',
-      label: 'Home',
+      label: 'Dashboard',
       onClick:goHome,
     },
     {

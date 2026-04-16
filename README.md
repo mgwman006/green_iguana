@@ -8,6 +8,40 @@ A full-stack **course enrollment and planning system** built as a **monorepo** c
 
 The system models real-world school scheduling constraints.
 
+---
+
+## ⚡ Quick Links
+
+[🚀 Getting Started](#-getting-started) •
+[🏗️ Architecture](#-architecture) •
+[🧠 Design Strategy](#-scheduling--resource-allocation-strategy) •
+[🧪 Testing Scenarios](#-testing-scenarios) •
+[⚖️ Trade-offs And Assumptions](#-trade-offs-and-assumptions)
+
+---
+
+## 📚 Table of Contents
+
+- [✨ Key Features](#-key-features)
+- [📁 Project Structure](#-project-structure)
+- [🧰 Tech Stack](#-tech-stack)
+- [🏗️ Architecture](#-architecture)
+- [🧠 Scheduling & Resource Allocation Strategy](#-scheduling--resource-allocation-strategy)
+- [🎯 Core Design Philosophy](#-core-design-philosophy)
+- [🏗️ Phase 1: Preconfigured Academic Scheduling](#-phase-1-preconfigured-academic-scheduling)
+- [📚 Output of Phase 1](#-output-of-phase-1)
+- [🧪 Phase 2: Student Enrollment Validation](#-phase-2-student-enrollment-validation)
+- [⚡ Why This Approach Is Effective](#-why-this-approach-is-effective)
+- [⚖️ Trade-offs And Assumptions](#-trade-offs-and-assumptions)
+- [🔮 Future Enhancements](#-future-enhancements)
+- [🚀 Getting Started](#-getting-started)
+- [🧪 Useful Commands](#-useful-commands)
+- [🧠 Design Decisions](#-design-decisions)
+- [📋 Testing Scenarios](#-testing-scenarios)
+- [⚠️ Troubleshooting](#-troubleshooting)
+- [👨‍💻 Engineering Notes](#-engineering-notes)
+- [✅ Submission Notes](#-submission-notes)
+
 ## ✨ Key Features
 
 - 📚 Student course enrollment
@@ -267,7 +301,7 @@ This design can grow into advanced optimization later:
 - room capacity optimization
 
 ---
-## ⚖️ Trade-offs & Assumptions
+## ⚖️ Trade-offs And Assumptions
 
 - SQLite was selected for simplicity and zero external setup.
 - The scheduling engine assumes administrator-managed section creation before enrollment opens.

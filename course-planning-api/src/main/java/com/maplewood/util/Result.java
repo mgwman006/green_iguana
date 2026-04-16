@@ -15,21 +15,6 @@ public class Result<T>
   private String message;
   private T data;
 
-  public boolean isSuccess()
-  {
-    return success;
-  }
-
-  public String getMessage()
-  {
-    return message;
-  }
-
-  public T getData()
-  {
-    return data;
-  }
-
   public static <T> Result<T> success(String message, T data)
   {
     return new Result<>(true, message, data);

@@ -1,10 +1,10 @@
-import { Avatar, Card, Col, Empty, Flex, Progress, Row, Statistic, Table, TableColumnsType, Typography } from "antd";
-import { useStudent } from "../store/student/StudentContext";
+import { Card, Col, Empty,Progress, Row, Table, TableColumnsType, Typography } from "antd";
+import { useStudent } from "../../store/student/StudentContext";
 import {  useNavigate } from "react-router";
 import Meta from "antd/es/card/Meta";
-import { CourseHistory } from "../types/types";
+import { CourseHistory } from "../../types/types";
 import { TrophyOutlined, BarChartOutlined } from "@ant-design/icons";
-import { TOTAL_CREDITS_REQUIRED } from "../utilities/constant";
+import { TOTAL_CREDITS_REQUIRED } from "../../utilities/constant";
 
 const columns: TableColumnsType<CourseHistory> = [
             { 
@@ -32,7 +32,7 @@ const columns: TableColumnsType<CourseHistory> = [
 export default function Dashboard()
 {
     const navigate = useNavigate();
-    const { state, dispatch } = useStudent();
+    const { state } = useStudent();
 
     if(!state.profile)
     {

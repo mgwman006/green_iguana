@@ -1,12 +1,13 @@
 import Home from "./components/Home";
 
-import Dashboard from "./components/Dasboard";
+import Dashboard from "./components/student/Dashboard";
 import LogIn from "./components/LogIn";
 import CourseCatalog from "./components/course/CourseCatalog";
 import CourseList from "./components/course/CourseList";
 import CourseDetails from "./components/course/CourseDetails";
 import EnrollmentPage from "./components/enrollment/EnrollmentPage";
 import EnrollmentList from "./components/enrollment/EnrollmentList";
+import ProfileCard from "./components/student/ProfileCard";
 
 const routes = [
   {
@@ -44,6 +45,10 @@ const routes = [
             Component: EnrollmentList
           }
         ]
+      },
+      {
+        path: "profile",
+        Component: ProfileCard
       }
     ]
   }

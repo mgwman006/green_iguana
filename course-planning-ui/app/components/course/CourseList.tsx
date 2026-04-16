@@ -1,6 +1,6 @@
 import { Button, Card, Col, Grid, Row, Select, Space, Table } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CourseDto } from "../../types/types";
 import { coursesApi } from "../../api/api";
 
