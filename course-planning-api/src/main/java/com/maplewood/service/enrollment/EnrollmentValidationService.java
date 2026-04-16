@@ -4,6 +4,7 @@ import com.maplewood.model.*;
 import com.maplewood.repository.CourseRepository;
 import com.maplewood.repository.EnrollmentRepository;
 import com.maplewood.repository.StudentCourseHistoryRepository;
+import com.maplewood.util.Constant;
 import com.maplewood.util.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,9 @@ public class EnrollmentValidationService
       {
         return Result.failure("Enrollment blocked - Not Valid GradeLevel");
       }
-      if (!hasCapacity(section))
+      if (!hasCapacity(student))
       {
-        return Result.failure("Enrollment blocked - maximum courses exceeded");
+        return Result.failure("Enrollment blocked - maximum course limit reached");
       }
       if (isTimeConflicts(student, section.getTimeSlots()))
       {
@@ -59,10 +60,10 @@ public class EnrollmentValidationService
     }
   }
 
-  private boolean hasCapacity(Section section)
+  private boolean hasCapacity(Student section)
   {
     long enrolled = section.getEnrollments().size();
-    return enrolled < section.getClassroom().getCapacity();
+    return enrolled < Constant.STUDENT_COURSES_LIMIT;
   }
 
   private boolean isValidGradeLevel(Student student, Course course)

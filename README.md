@@ -1,33 +1,12 @@
 # 🧭 Maplewood Course Planning App
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-green)
+![React](https://img.shields.io/badge/React-19-blue)
+![Docker](https://img.shields.io/badge/Docker-ready-blue)
 
-A full-stack **course enrollment and planning system** built as a **monorepo** containing a Spring Boot backend and React frontend.
+A full-stack **course enrollment and planning system** built as a **monorepo** containing a Spring Boot (backend) and React (frontend).
 
-The application demonstrates core academic scheduling workflows such as:
-
-- Student enrollment
-- Course prerequisite validation
-- Schedule conflict detection
-- Maximum course load enforcement
-- Real-time frontend/backend integration
-
----
-
-## 🌐 Live Demo
-
-This project can be run locally using Docker.
-
-```bash
-docker compose up --build
-```
-
-Then access:
-
-| Service | URL |
-|--------|-----|
-| Frontend | http://localhost:3000 |
-| Backend API | http://localhost:8080 |
-
----
+The system models real-world school scheduling constraints.
 
 ## ✨ Key Features
 
@@ -288,12 +267,13 @@ This design can grow into advanced optimization later:
 - room capacity optimization
 
 ---
+## ⚖️ Trade-offs & Assumptions
 
-## 🧠 Engineering Perspective
-
-Rather than treating scheduling as only a student problem, the system models scheduling first as an **institutional resource allocation problem**, guided by workload hours and operational availability, then as an enrollment workflow.
-
-This significantly reduces downstream conflicts.
+- SQLite was selected for simplicity and zero external setup.
+- The scheduling engine assumes administrator-managed section creation before enrollment opens.
+- Enrollment validation prioritizes correctness over optimization.
+- Docker Compose was chosen for local developer experience rather than production orchestration.
+- Given challenge time constraints, emphasis was placed on core workflows over advanced UI polish.
 
 ---
 
@@ -307,11 +287,13 @@ Given more time, the planning engine could evolve into:
 - preferred timeslot matching
 - AI-assisted schedule generation
 - demand-based section creation
-- And of course unit tests(lol) , I had limited time and hence the focus was only functionality
-```
+- Comprehensive unit and integration test coverage
+- Additional time would have been invested in automated testing, with priority given to core functionality during the challenge timeframe
+
+---
 ## 🚀 Getting Started
 
-## Prerequisites
+### Prerequisites
 
 Install:
 
@@ -327,9 +309,9 @@ docker compose version
 
 ---
 
-## Run Locally
+### Run Locally
 
-### 1. Clone Repository
+#### 1. Clone Repository
 
 ```bash
 git clone https://github.com/mgwman006/green_iguana.git
@@ -338,7 +320,7 @@ cd green_iguana
 
 ---
 
-### 2. Ensure Database Exists
+#### 2. Ensure Database Exists
 
 ```bash
 touch maplewood_school.sqlite
@@ -347,7 +329,7 @@ chmod 666 maplewood_school.sqlite
 
 ---
 
-### 3. Start Application
+#### 3. Start Application
 
 ```bash
 docker compose up --build
@@ -355,7 +337,7 @@ docker compose up --build
 
 ---
 
-### 4. Open Application
+#### 4. Open Application
 
 | Service | URL |
 |--------|-----|
@@ -364,7 +346,7 @@ docker compose up --build
 
 ---
 
-## 🛑 Stop Application
+#### 🛑 Stop Application
 
 ```bash
 docker compose down
@@ -431,17 +413,6 @@ Used to provide a single-command startup experience and eliminate machine-specif
 
 ---
 
-## 📊 Business Rules Implemented
-
-### Enrollment Rules
-
-- Students may enroll in a maximum of **5 courses**
-- Prerequisites must be completed first
-- Schedule conflicts are not allowed
-- Duplicate enrollment is prevented
-
----
-
 ## 📋 Testing Scenarios
 
 ### ✅ Scenario 1: Valid Enrollment
@@ -502,9 +473,19 @@ Enrollment blocked
 
 ---
 
-### ❌ Scenario 4: Maximum Course Limit
+### ❌ Scenario 4: Maximum Course Limit (5)
 
-Student attempts 6th course.
+Ensure the student is already enrolled in the following five courses:
+
+- World History
+- Chemistry I
+- Algebra I
+- Intro to Programming
+- Journalism
+
+The student then attempts to enroll in **Biology I** as a sixth course.
+
+Since maximum course load validation is executed first, enrollment is rejected.
 
 Result:
 
@@ -514,7 +495,7 @@ Enrollment blocked
 
 ---
 
-## Example 5 Valid Courses for Joseph Young (Student Number 101)
+### Valid Courses that Joseph Young can enroll at the same time (Student Number 101)
 
 - World History
 - Chemistry I
@@ -566,4 +547,14 @@ This project emphasizes:
 docker compose up --build
 ```
 
-Application ready 🚀
+Application is ready 🚀
+
+## ✅ Submission Notes
+
+This solution focuses on demonstrating:
+
+- practical system design
+- business rule enforcement
+- clean separation of responsibilities
+- maintainable full-stack architecture
+- realistic academic scheduling workflows
