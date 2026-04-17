@@ -1,4 +1,4 @@
-import { Button, Card, Col, Grid, Row, Select, Space, Table } from "antd";
+import { Button, Card, Col, Grid, Row, Select, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CourseDto } from "../../types/types";
@@ -30,8 +30,12 @@ export default function CourseList()
             }
             setLoading(false);
          };
-        fetchCourses();
+        void fetchCourses();
     }, [grade, semester]);
+    const goToDetailsPage = (id:number) =>
+    {
+      navigate(`/courses/${id}`);
+    }
 
     const columns = [
         { title: "Code", dataIndex: "code" },
@@ -47,11 +51,10 @@ export default function CourseList()
             title: "Action",
             dataIndex: "action",
             render: (_: any, record: CourseDto) => (
-                <a onClick={() => navigate(`/courses/${record.id}`)}>
+                <Typography.Link onClick={() => goToDetailsPage(record.id)}>
                     View
-                </a>
-    ),
-  },
+                </Typography.Link>),
+        },
     ];
 
   return (
@@ -101,7 +104,7 @@ export default function CourseList()
                 <p><strong>Semester:</strong> {course.semesterOrder}</p>
                 <p>
                   <strong>Prerequisite:</strong>{" "}
-                  {course.prerequisiteName || "None"}
+                  {course.prerequisiteName ?? "None"}
                 </p>
               </Card>
             </Col>

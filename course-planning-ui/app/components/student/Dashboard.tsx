@@ -96,7 +96,7 @@ export default function Dashboard()
                     columns={columns} 
                     dataSource={profile?.courseHistory ?? []} 
                     rowKey="id"
-                    title={() => <h3>Course History</h3>}
+                    title={() => "Course History"}
                     locale={{
                         emptyText: <Empty description="No Course History Available" />,
                     }}
