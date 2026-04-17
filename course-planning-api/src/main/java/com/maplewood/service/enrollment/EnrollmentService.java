@@ -16,10 +16,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EnrollmentService
 {
+  /**
+   * Variables
+   */
   private final EnrollmentRepository enrollmentRepository;
   private final EnrollmentValidationService enrollmentValidationService;
   private final SectionService sectionService;
 
+  public Result<String> deleteEnrollmentById(Long id)
+  {
+    try
+    {
+      enrollmentRepository.deleteById(id);
+      return Result.success(Constant.SUCCESS,null);
+    }
+    catch (Exception exception)
+    {
+      return Result.failure(exception.getMessage());
+    }
+  }
 
   public Result<EnrollmentResponseDto> enroll(Student student, Section section)
   {

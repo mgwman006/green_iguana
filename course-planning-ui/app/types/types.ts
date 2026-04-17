@@ -93,11 +93,6 @@ export interface Enrollment {
   status: 'enrolled' | 'completed' | 'dropped';
 }
 
-export interface ValidationError {
-  type: 'prerequisite' | 'conflict' | 'max_courses' | 'other';
-  message: string;
-}
-
 export type ApiResponse<T> = {
   success: boolean;
   data: T;
@@ -110,4 +105,5 @@ export type StudentAction =
   | { type: "FETCH_ERROR"; payload: string }
   | { type: "LOGOUT" }
   | { type: "UPDATE_ENROLLMENTS"; payload: Enrollment[]}
-  | { type: "ADD_ENROLLMENT"; payload: Enrollment };
+  | { type: "ADD_ENROLLMENT"; payload: Enrollment }
+  | { type: "REMOVE_ENROLLMENT"; payload: number};

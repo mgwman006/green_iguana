@@ -34,3 +34,6 @@ course-planning-ui/yarn-error.log*
 
 # Dev container
 .devcontainer/.env
+
+#Database file
+*.sqlite

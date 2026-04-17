@@ -1,5 +1,5 @@
-import { Button, Col, Flex, Form, Input, notification, Row } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Col, Flex, Form, Input, Row } from "antd";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined, UserOutlined } from '@ant-design/icons';
 import { useStudent } from "../store/student/StudentContext";
@@ -26,7 +26,7 @@ export default function LogIn()
             const profile = await studentsApi.getById(studentId);
             dispatch({type: "FETCH_SUCCESS",payload: profile,});
         } catch (err: any) {
-            dispatch({type: "FETCH_ERROR",payload: err.message || err,});
+            dispatch({type: "FETCH_ERROR",payload: err.message ?? err,});
         }
     }
 
@@ -69,7 +69,7 @@ export default function LogIn()
                             <Form.Item
                                 name="studentId"
                                 rules={[
-                                    { required: true, message: 'Student Id is rquired!' },
+                                    { required: true, message: 'Student Id is required!' },
                                     {
                                         validator: (_, value) => {
                                             if (!value) return Promise.resolve();
@@ -79,7 +79,8 @@ export default function LogIn()
                                             return Promise.resolve();
                                             }
 
-                                            return Promise.reject("Please enter a valid Student ID");
+                                            return Promise.reject(new Error("Please enter a valid Student ID"));
+
                                         },
                                     }
                                 ]}

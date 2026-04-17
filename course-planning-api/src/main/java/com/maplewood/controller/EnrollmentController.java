@@ -2,7 +2,6 @@ package com.maplewood.controller;
 
 import com.maplewood.dto.request.EnrollmentRequestDto;
 import com.maplewood.dto.response.EnrollmentResponseDto;
-import com.maplewood.model.Enrollment;
 import com.maplewood.model.Section;
 import com.maplewood.model.Student;
 import com.maplewood.service.enrollment.EnrollmentService;
@@ -14,10 +13,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 
 @RestController
@@ -78,6 +75,26 @@ public class EnrollmentController
     {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.failure("Internal server error", 500));
+    }
+  }
+
+  @DeleteMapping("/{id}/deregister")
+  public ResponseEntity<ApiResponse<String>> deleteEnrollment(@PathVariable Long id)
+  {
+    try
+    {
+      Result<String> result = enrollmentService.deleteEnrollmentById(id);
+      if (result.isSuccess())
+      {
+        return ResponseEntity.ok(ApiResponse.success(result.getData(), 200));
+      }
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    catch (Exception exception)
+    {
+      return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(ApiResponse.failure(exception.getMessage(), 500));
     }
   }
 }

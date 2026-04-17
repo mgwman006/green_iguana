@@ -23,7 +23,7 @@ export default function EnrollmentPage() {
             }
         };
 
-        loadSemester();
+        void loadSemester();
     }, []);
 
     const formatDate = (date: string) =>

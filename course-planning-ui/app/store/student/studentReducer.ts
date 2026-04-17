@@ -38,6 +38,19 @@ export const studentReducer = (state: StudentState, action: StudentAction): Stud
           ]
         }
       };
+
+    case "REMOVE_ENROLLMENT":
+      if (!state.profile) return state;
+
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          enrollments: state.profile.enrollments.filter(
+              (enrollment) => enrollment.id !== action.payload
+          )
+        }
+      };
     
     default:
       return state;

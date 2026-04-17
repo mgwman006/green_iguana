@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, {createContext, useContext, useEffect, useMemo, useReducer} from "react";
 import { studentReducer } from "./studentReducer";
 import { StudentState } from "../../types/types";
 import { STUDENT_STORAGE_KEY } from "../../utilities/constant";
@@ -47,9 +47,12 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [state.profile]);
 
+  const value = useMemo(() => {
+    return { state, dispatch };
+  }, [state, dispatch]);
 
   return (
-    <StudentContext.Provider value={{ state, dispatch }}>
+    <StudentContext.Provider value={value}>
       {children}
     </StudentContext.Provider>
   );

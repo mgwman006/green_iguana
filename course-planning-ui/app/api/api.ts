@@ -57,7 +57,12 @@ export const enrollmentsApi = {
   {
     const res = await apiClient.post<ApiResponse<Enrollment>>("/enrollments/enroll", {studentId, sectionId });
     return handleResponse(res.data);
-  } 
+  },
+  deregister: async (enrollmentId:number) =>
+  {
+    const res = await apiClient.delete<ApiResponse<String>>(`/enrollments/${enrollmentId}/deregister`);
+    return handleResponse(res.data);
+  }
 };
 
 export const semesterApi = {
