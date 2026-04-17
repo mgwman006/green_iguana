@@ -1,4 +1,4 @@
-package com.maplewood.util.enums;
+package com.maplewood.enums;
 
 public enum EnrollmentStatus {
   ACTIVE,

@@ -1,17 +1,11 @@
 package com.maplewood.controller;
 
 import com.maplewood.dto.response.CourseDetailsDto;
-import com.maplewood.model.Course;
 import com.maplewood.service.course.CourseService;
-import com.maplewood.util.ApiResponse;
-import com.maplewood.util.Constant;
-import com.maplewood.util.Result;
+import com.maplewood.dto.ApiResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,39 +20,18 @@ public class CourseController
     @RequestParam(required = false) Integer grade,
     @RequestParam(required = false) Integer semesterOrder)
   {
-    try
-    {
-      Result<List<CourseDetailsDto>> result = courseService.getCourses(grade, semesterOrder);
-      if(!result.isSuccess())
-      {
-        return new ResponseEntity<>(
-          ApiResponse.failure(Constant.BAD_REQUEST_MESSAGE,400),
-          HttpStatus.BAD_REQUEST);
-      }
-
-      return ResponseEntity
-        .ok()
-        .body(ApiResponse.success(result.getData(),200));
-    }
-    catch (Exception exception)
-    {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(ApiResponse.failure(Constant.INTERNAL_SERVER_ERROR_MESSAGE,500));
-    }
+    List<CourseDetailsDto> result = courseService.getCourses(grade, semesterOrder);
+    return ResponseEntity
+      .ok()
+      .body(ApiResponse.success(result,200));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ApiResponse<CourseDetailsDto>> getCourseDetails(@PathVariable Long id)
   {
-    Result<CourseDetailsDto> result = courseService.getCourseDetails(id);
-
-    if (!result.isSuccess()) {
-      return ResponseEntity.badRequest()
-        .body(ApiResponse.failure(result.getMessage(), 400));
-    }
-
+    CourseDetailsDto result = courseService.getCourseDetails(id);
     return ResponseEntity.ok(
-      ApiResponse.success(result.getData(), 200)
+      ApiResponse.success(result, 200)
     );
   }
 }

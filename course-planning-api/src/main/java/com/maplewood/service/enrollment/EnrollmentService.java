@@ -1,16 +1,19 @@
 package com.maplewood.service.enrollment;
 
+import com.maplewood.dto.request.EnrollmentRequestDto;
 import com.maplewood.dto.response.EnrollmentResponseDto;
+import com.maplewood.exception.ResourceNotFoundException;
 import com.maplewood.model.*;
 import com.maplewood.repository.EnrollmentRepository;
+import com.maplewood.repository.SectionRepository;
+import com.maplewood.repository.StudentRepository;
 import com.maplewood.service.section.SectionService;
-import com.maplewood.util.Constant;
-import com.maplewood.util.Result;
-import com.maplewood.util.enums.EnrollmentStatus;
+import com.maplewood.config.Constant;
+import com.maplewood.enums.EnrollmentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,35 +25,29 @@ public class EnrollmentService
   private final EnrollmentRepository enrollmentRepository;
   private final EnrollmentValidationService enrollmentValidationService;
   private final SectionService sectionService;
+  private final StudentRepository studentRepository;
+  private final SectionRepository sectionRepository;
 
-  public Result<String> deleteEnrollmentById(Long id)
+  @Transactional
+  public void deleteEnrollmentById(Long id)
   {
-    try
-    {
-      enrollmentRepository.deleteById(id);
-      return Result.success(Constant.SUCCESS,null);
-    }
-    catch (Exception exception)
-    {
-      return Result.failure(exception.getMessage());
-    }
+    Enrollment enrollment = enrollmentRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Enrollment with id " + id + Constant.DOES_NOT_EXIST));
+    enrollmentRepository.delete(enrollment);
   }
 
-  public Result<EnrollmentResponseDto> enroll(Student student, Section section)
+  @Transactional
+  public EnrollmentResponseDto enroll(EnrollmentRequestDto request)
   {
-    // validate FIRST
-    Result<Boolean> validation = enrollmentValidationService.validate(student, section);
-    if (!validation.isSuccess())
-    {
-      return Result.failure(validation.getMessage());
-    }
+    Student student = studentRepository.findById(request.studentId())
+      .orElseThrow(() -> new ResourceNotFoundException("Student with id " + request.studentId() + " does not exist"));
 
-    // duplicate check
-    Optional<Enrollment> existing = enrollmentRepository.findByStudentIdAndSectionId(student.getId(), section.getId());
-    if (existing.isPresent())
-    {
-      return Result.failure("Already enrolled");
-    }
+    Section section = sectionRepository.findById(request.sectionId())
+      .orElseThrow(() -> new ResourceNotFoundException("Section with id " + request.sectionId() + " does not exist"));
+
+
+    //Validation
+    enrollmentValidationService.validateEnrollment(student, section);
 
     Enrollment enrollment = new Enrollment();
     enrollment.setStudent(student);
@@ -59,12 +56,7 @@ public class EnrollmentService
     enrollment.setEnrolledAt(LocalDateTime.now());
 
     enrollment = enrollmentRepository.save(enrollment);
-    student = enrollment.getStudent();
-    section = enrollment.getSection();
-    return Result.success(
-      Constant.SUCCESS,
-      map(enrollment,student,section)
-    );
+    return  map(enrollment, student, section);
   }
 
   public EnrollmentResponseDto map(Enrollment enrollment, Student student, Section section)
@@ -74,7 +66,6 @@ public class EnrollmentService
         enrollment.getId(),
         sectionService.map(section),
         student.getId(),
-        0L,
         enrollment.getStudent().getStatus()
       );
   }

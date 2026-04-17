@@ -2,19 +2,16 @@ package com.maplewood.service.course;
 
 import com.maplewood.dto.response.CourseDetailsDto;
 import com.maplewood.dto.response.SectionDto;
+import com.maplewood.exception.ResourceNotFoundException;
 import com.maplewood.model.Course;
 import com.maplewood.model.Section;
 import com.maplewood.repository.CourseRepository;
 import com.maplewood.repository.SectionRepository;
 import com.maplewood.service.section.SectionService;
-import com.maplewood.util.Constant;
-import com.maplewood.util.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,53 +21,30 @@ public class CourseService
   private SectionRepository sectionRepository;
   private SectionService sectionService;
 
-  public Result<List<CourseDetailsDto>> getCourses(Integer grade, Integer semesterOrder)
+  public List<CourseDetailsDto> getCourses(Integer grade, Integer semesterOrder)
   {
-    try
-    {
-      List<Course> courses = courseRepository.findCourses(grade, semesterOrder);
-      return Result.success(
-        Constant.SUCCESS,
-        courses.stream()
-          .map(course -> new CourseDetailsDto(
-            course.getId(),
-            course.getCode(),
-            course.getName(),
-            course.getDescription(),
-            course.getCredits(),
-            course.getHoursPerWeek(),
-            course.getSpecialization().getId(),
-            course.getPrerequisite() != null ? course.getPrerequisite().getId():null,
-            course.getPrerequisite() != null ? course.getPrerequisite().getName():null,
-            course.getCourseType(),
-            course.getGradeLevelMin(),
-            course.getGradeLevelMax(),
-            course.getSemesterOrder(),
-            new ArrayList<>()
-          )).toList()
-      );
-    }
-    catch (Exception exception)
-    {
-      return Result.failure(exception.getMessage());
-    }
+    List<Course> courses = courseRepository.findCourses(grade, semesterOrder);
+
+    return courses.stream()
+          .map(course -> map(course, new ArrayList<>())).toList();
   }
 
-  public Result<CourseDetailsDto> getCourseDetails(Long id)
+  public CourseDetailsDto getCourseDetails(Long id)
   {
-    Optional<Course> optionalCourse = courseRepository.findById(id);
-    if (optionalCourse.isEmpty())
-    {
-      return Result.failure("Course not found");
-    }
-    Course course = optionalCourse.get();
+    Course course = courseRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Course not found: " + id));
 
     List<Section> sections = sectionRepository.findByCourseId(course.getId());
     List<SectionDto> sectionDtoList = sections.stream()
       .map(s -> sectionService.map(s))
       .toList();
 
-    CourseDetailsDto dto = new CourseDetailsDto(
+    return map(course,sectionDtoList);
+  }
+
+  private CourseDetailsDto map(Course course,List<SectionDto>  sectionDtoList)
+  {
+    return new CourseDetailsDto(
       course.getId(),
       course.getCode(),
       course.getName(),
@@ -86,8 +60,5 @@ public class CourseService
       course.getSemesterOrder(),
       sectionDtoList
     );
-
-    return Result.success(Constant.SUCCESS,dto);
-
   }
 }

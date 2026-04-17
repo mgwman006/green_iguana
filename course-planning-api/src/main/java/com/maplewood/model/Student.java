@@ -1,5 +1,6 @@
 package com.maplewood.model;
 
+import com.maplewood.config.Constant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +47,6 @@ public class Student {
 
   public boolean hasReachedCoursesLimit()
   {
-    return this.enrollments.size()>=5;
+    return this.enrollments.size()>=Constant.STUDENT_COURSES_LIMIT;
   }
 }

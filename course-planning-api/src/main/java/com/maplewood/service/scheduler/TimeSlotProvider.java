@@ -2,7 +2,7 @@ package com.maplewood.service.scheduler;
 
 
 import com.maplewood.model.TimeSlot;
-import com.maplewood.util.enums.WeekDay;
+import com.maplewood.enums.WeekDay;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

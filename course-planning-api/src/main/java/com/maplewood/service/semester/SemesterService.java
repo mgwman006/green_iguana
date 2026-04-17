@@ -1,13 +1,12 @@
 package com.maplewood.service.semester;
 
 import com.maplewood.dto.response.SemesterDto;
+import com.maplewood.exception.ResourceNotFoundException;
 import com.maplewood.model.Semester;
 import com.maplewood.repository.SemesterRepository;
-import com.maplewood.util.Constant;
-import com.maplewood.util.Result;
+import com.maplewood.config.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,22 +17,11 @@ public class SemesterService
    */
   private final SemesterRepository semesterRepository;
 
-  public Result<SemesterDto> getActiveSemester()
+  public SemesterDto getActiveSemester()
   {
-    try
-    {
-      Optional<Semester> optionalSemester = semesterRepository.findActiveSemester();
-      if (optionalSemester.isEmpty())
-      {
-        return Result.failure(Constant.NO_SEMESTER_FOUND);
-      }
-      SemesterDto semesterDto = map(optionalSemester.get());
-      return Result.success(Constant.SUCCESS, semesterDto);
-    }
-    catch (Exception exception)
-    {
-      return Result.failure(exception.getMessage());
-    }
+    Semester semester = semesterRepository.findActiveSemester()
+      .orElseThrow(() -> new ResourceNotFoundException(Constant.NO_SEMESTER_FOUND));
+    return map(semester);
   }
 
   public SemesterDto map(Semester semester)

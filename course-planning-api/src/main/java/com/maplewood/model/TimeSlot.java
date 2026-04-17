@@ -1,6 +1,6 @@
 package com.maplewood.model;
 
-import com.maplewood.util.enums.WeekDay;
+import com.maplewood.enums.WeekDay;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

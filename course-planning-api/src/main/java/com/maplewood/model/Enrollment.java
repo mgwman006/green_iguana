@@ -1,6 +1,6 @@
 package com.maplewood.model;
 
-import com.maplewood.util.enums.EnrollmentStatus;
+import com.maplewood.enums.EnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

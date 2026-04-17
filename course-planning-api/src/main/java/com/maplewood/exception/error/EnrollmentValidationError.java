@@ -1,4 +1,4 @@
-package com.maplewood.util.error;
+package com.maplewood.exception.error;
 
 public class EnrollmentValidationError
 {
@@ -6,4 +6,5 @@ public class EnrollmentValidationError
   public static final String MAXIMUM_COURSE_LIMIT_REACHED = "Enrollment blocked - maximum course limit reached";
   public static final String SCHEDULE_CONFLICT = "Enrollment blocked - schedule conflict";
   public static final String MISSING_PREREQUISITE = "Enrollment blocked - missing prerequisite";
+  public static final String DUPLICATE = "Enrollment blocked - course already enrolled";
 }
