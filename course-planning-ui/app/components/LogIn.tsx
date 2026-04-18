@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Form, Input, Row } from "antd";
+import {Button, Col, Flex, Form, Input, message, Row} from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined, UserOutlined } from '@ant-design/icons';
@@ -11,7 +11,9 @@ export default function LogIn()
 {
     const navigate = useNavigate();
     const { state, dispatch } = useStudent();
-    
+    const [messageApi, messageContextHolder] = message.useMessage();
+
+
 
     const onFinish =  async (values:any) => {
 
@@ -25,8 +27,12 @@ export default function LogIn()
         try {
             const profile = await studentsApi.getById(studentId);
             dispatch({type: "FETCH_SUCCESS",payload: profile,});
-        } catch (err: any) {
-            dispatch({type: "FETCH_ERROR",payload: err.message ?? err,});
+        } catch (error: unknown) {
+            messageApi.error(
+                error instanceof Error
+                    ? error.message
+                    : "Unexpected error"
+            );
         }
     }
 
@@ -45,6 +51,7 @@ export default function LogIn()
                 }
             }
         >
+            {messageContextHolder}
             {/* Error State */}
             {state.error && (
                 <p style={{ color: "red", marginTop: "10px",textAlign:'center' }}>

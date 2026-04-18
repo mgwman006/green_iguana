@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * <p>This class delegates all logic to the scheduling engine.</p>
  */
 @Component
-@Profile("dev")
+@Profile("!test")
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
@@ -21,7 +21,6 @@ public class DataInitializer implements CommandLineRunner {
   @Override
   public void run(String... args)
   {
-    sectionGeneratorService.resetSchedule();
     sectionGeneratorService.generateAllSections();
   }
 }

@@ -6,7 +6,6 @@ import com.maplewood.repository.CourseRepository;
 import com.maplewood.repository.EnrollmentRepository;
 import com.maplewood.repository.StudentCourseHistoryRepository;
 import com.maplewood.exception.error.EnrollmentValidationError;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -104,7 +103,6 @@ public class EnrollmentValidationService
     return passed.containsAll(required);
   }
 
-  @PostConstruct
   public void buildClosure()
   {
     List<Course> courses = courseRepository.findAll();

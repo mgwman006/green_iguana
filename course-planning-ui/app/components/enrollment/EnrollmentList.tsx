@@ -22,8 +22,12 @@ export default function EnrollmentList()
                 payload: enrollmentId,
             });
             messageApi.success("Course deregistered successfully");
-        } catch (err: any) {
-            messageApi.error(err?.message ?? "Failed to deregister");
+        } catch (error: unknown) {
+            messageApi.error(
+                error instanceof Error
+                    ? error.message
+                    : "Unexpected error"
+            );
         }
     };
 

@@ -58,8 +58,12 @@ export default function CourseDetails()
             const updated = await coursesApi.getById(Number(courseId));
             setCourse(updated);
 
-        } catch (error: any) {
-            messageApi.error(error);
+        } catch (error: unknown) {
+            messageApi.error(
+                error instanceof Error
+                    ? error.message
+                    : "Unexpected error"
+            );
         } finally {
             setEnrollingId(null);
         }

@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface StudentCourseHistoryRepository extends JpaRepository<StudentCourseHistory, Long>
@@ -16,6 +15,6 @@ public interface StudentCourseHistoryRepository extends JpaRepository<StudentCou
     WHERE sch.student.id = :studentId
     AND sch.status = 'passed'
   """)
-  Set<StudentCourseHistory> findPassedHistory(Long studentId);
+  List<StudentCourseHistory> findPassedHistory(Long studentId);
   List<StudentCourseHistory> findByStudentId(Long studentId);
 }

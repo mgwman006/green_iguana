@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "students")
@@ -40,7 +41,7 @@ public class Student {
   private String status;
 
   @OneToMany(mappedBy = "student")
-  Set<Enrollment> enrollments;
+  Set<Enrollment> enrollments = new HashSet<>();
 
   @Column(name = "created_at")
   private LocalDateTime createAt;

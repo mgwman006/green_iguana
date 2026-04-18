@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "sections")
 @Getter
@@ -39,4 +42,34 @@ public class Section {
   @OneToMany(mappedBy = "section")
   private Set<Enrollment> enrollments = new HashSet<>();
 
+  @Column(nullable = false, unique = true)
+  private String signature;
+
+  public String getSignature()
+  {
+    StringBuilder sb = new StringBuilder(64);
+
+    sb.append(course.getId())
+      .append('|')
+      .append(teacher.getId())
+      .append('|')
+      .append(classroom.getId())
+      .append('|');
+
+    timeSlots.stream()
+      .sorted(Comparator.comparing(TimeSlot::getDay)
+        .thenComparing(TimeSlot::getStartHour)
+        .thenComparing(TimeSlot::getEndHour))
+      .forEach(slot ->
+        sb.append(slot.getDay()).append('-')
+          .append(slot.getStartHour()).append('-')
+          .append(slot.getEndHour()).append(',')
+      );
+
+    if (!timeSlots.isEmpty()) {
+      sb.setLength(sb.length() - 1);
+    }
+
+    return sb.toString();
+  }
 }

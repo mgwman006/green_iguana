@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "timeslots")
+@Table(
+  uniqueConstraints = @UniqueConstraint(
+    columnNames = {"section_id", "day", "start_hour", "end_hour"}
+  )
+)
 @Getter
 @Setter
 @NoArgsConstructor

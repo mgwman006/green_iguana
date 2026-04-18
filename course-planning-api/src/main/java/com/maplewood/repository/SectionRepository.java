@@ -11,4 +11,5 @@ import java.util.List;
 public interface SectionRepository extends JpaRepository<Section, Long>
 {
   List<Section> findByCourseId(Long courseId);
+  boolean existsBySignature(String signature);
 }
