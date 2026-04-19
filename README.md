@@ -461,6 +461,14 @@ ___
 ### Unit Tests Coverage
 ![Code coverage](/docs/images/codecoverage.png)
 
+All test classes use the @ActiveProfiles("test") annotation. To execute the test suite correctly, run Maven with the test Spring profile enabled.
+```bash
+
+mvn clean test jacoco:report -Dspring.profiles.active=test
+
+```
+
+
 ### Business Testing Scenarios
 
 #### ✅ Scenario 1: Valid Enrollment
