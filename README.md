@@ -4,56 +4,40 @@
 ![React](https://img.shields.io/badge/React-19-blue)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue)
 
-A full-stack **course enrollment and planning system** built as a **monorepo** containing a Spring Boot (backend) and React (frontend).
+A full-stack course enrollment and planning platform structured as a monorepo, consisting of a Spring Boot backend and a React frontend.
 
-The system models real-world school scheduling constraints.
+The system is designed to reflect real-world academic scheduling constraints and resource management rules.
 
 ---
 
 ## ⚡ Quick Links
 
-[🚀 Getting Started](#-getting-started) •
-[🏗️ Architecture](#-architecture) •
-[🧠 Design Strategy](#-scheduling--resource-allocation-strategy) •
-[🧪 Testing Scenarios](#-testing-scenarios) •
-[⚖️ Trade-offs And Assumptions](#-trade-offs-and-assumptions)
+[🚀 Getting Started](#getting-started) •
+[🏗️ Architecture](#architecture) •
+[🧠 Design Strategy](#scheduling-and-resource-allocation-strategy) •
+[🧪 Testing Scenarios](#testing) •
+[⚖️ Trade-offs And Assumptions](#trade-offs-and-assumptions)
 
 ---
 
-## 📚 Table of Contents
+##  Table of Contents
 
-- [✨ Key Features](#-key-features)
-- [📁 Project Structure](#-project-structure)
-- [🧰 Tech Stack](#-tech-stack)
-- [🏗️ Architecture](#-architecture)
-- [🧠 Scheduling & Resource Allocation Strategy](#-scheduling--resource-allocation-strategy)
-- [🎯 Core Design Philosophy](#-core-design-philosophy)
-- [🏗️ Phase 1: Preconfigured Academic Scheduling](#-phase-1-preconfigured-academic-scheduling)
-- [📚 Output of Phase 1](#-output-of-phase-1)
-- [🧪 Phase 2: Student Enrollment Validation](#-phase-2-student-enrollment-validation)
-- [⚡ Why This Approach Is Effective](#-why-this-approach-is-effective)
-- [⚖️ Trade-offs And Assumptions](#-trade-offs-and-assumptions)
-- [🔮 Future Enhancements](#-future-enhancements)
-- [🚀 Getting Started](#-getting-started)
-- [🧪 Useful Commands](#-useful-commands)
-- [🧠 Design Decisions](#-design-decisions)
-- [📋 Testing Scenarios](#-testing-scenarios)
-- [⚠️ Troubleshooting](#-troubleshooting)
-- [👨‍💻 Engineering Notes](#-engineering-notes)
-- [✅ Submission Notes](#-submission-notes)
+- [ Project Structure](#project-structure)
+- [ Tech Stack](#tech-stack)
+- [ Architecture](#architecture)
+- [ Scheduling & Resource Allocation Strategy](#scheduling-and-resource-allocation-strategy)
+- [ Core Design Philosophy](#core-design-philosophy)
+- [ Trade-offs And Assumptions](#trade-offs-and-assumptions)
+- [ Future Enhancements](#future-enhancements)
+- [ Getting Started](#getting-started)
+- [ Useful Commands](#useful-commands)
+- [ UI User Flow](#ui-user-flow)
+- [ Testing](#testing)
+- [ Troubleshooting](#troubleshooting)
+- [ Submission Notes](#submission-notes)
 
-## ✨ Key Features
 
-- 📚 Student course enrollment
-- ⛔ Prerequisite enforcement
-- 🕒 Schedule overlap detection
-- 📈 Maximum course registration limits
-- 🔄 REST API integration
-- 🐳 One-command local setup via Docker Compose
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 .
@@ -64,12 +48,11 @@ The system models real-world school scheduling constraints.
 │   └── src
 │       ├── main
 │       └── test
-│
+
 ├── course-planning-ui               # React + Vite frontend
 │   ├── app
 │   │   ├── api
 │   │   ├── components
-│   │   ├── service
 │   │   ├── store
 │   │   ├── types
 │   │   └── utilities
@@ -85,7 +68,7 @@ The system models real-world school scheduling constraints.
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |------|------------|
@@ -97,23 +80,15 @@ The system models real-world school scheduling constraints.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
-```text
-Browser
-   ↓
-React Frontend (localhost:3000)
-   ↓
-Spring Boot REST API (localhost:8080)
-   ↓
-SQLite Database
-```
+![Architecture](docs/images/flowchart.png)
 
 ---
 
-## 🧠 Scheduling & Resource Allocation Strategy
+## Scheduling And Resource Allocation Strategy
 
-The core challenge was not only student enrollment validation, but helping the school efficiently manage **limited operational resources** before registration begins.
+The core challenge is not only student enrollment validation but also efficient pre-allocation of academic resources.
 
 These resources include:
 
@@ -126,7 +101,7 @@ These resources include:
 
 ---
 
-## 🎯 Core Design Philosophy
+## Core Design Philosophy
 
 Instead of solving conflicts only at registration time, the system uses a **two-phase planning model**:
 
@@ -139,7 +114,7 @@ This mirrors how real schools operate.
 
 ---
 
-## 🏗️ Phase 1: Preconfigured Academic Scheduling
+## Phase 1: Preconfigured Academic Scheduling
 
 Before students register, administrators define available course sections for the term.
 
@@ -229,7 +204,7 @@ This ensures the timetable reflects real academic workload requirements.
 
 ---
 
-## 📚 Output of Phase 1
+## Output of Phase 1
 
 The result is a set of ready-to-enroll course sections such as:
 
@@ -249,7 +224,7 @@ Students register into these prebuilt sections rather than raw courses.
 
 ---
 
-## 🧪 Phase 2: Student Enrollment Validation
+## Phase 2: Student Enrollment Validation
 
 Once sections exist, student registration becomes simpler and faster.
 
@@ -265,7 +240,7 @@ Because operational constraints were already solved earlier, student enrollment 
 
 ---
 
-## ⚡ Why This Approach Is Effective
+## Why This Approach Is Effective
 
 ### Separation of Concerns
 
@@ -301,17 +276,16 @@ This design can grow into advanced optimization later:
 - room capacity optimization
 
 ---
-## ⚖️ Trade-offs And Assumptions
+## Trade-offs And Assumptions
 
-- SQLite was selected for simplicity and zero external setup.
-- The scheduling engine assumes administrator-managed section creation before enrollment opens.
-- Enrollment validation prioritizes correctness over optimization.
-- Docker Compose was chosen for local developer experience rather than production orchestration.
-- Given challenge time constraints, emphasis was placed on core workflows over advanced UI polish.
-
+- SQLite was selected for its simplicity and lack of external configuration requirements.
+- The scheduling engine assumes that sections are created and managed by administrators before the enrollment period begins.
+- Enrollment validation prioritizes correctness and data consistency over advanced optimization strategies.
+- Due to time constraints, the focus was placed on core business workflows rather than UI refinement or visual polish.
+- The system is designed for single-instance deployment and does not yet support horizontal scaling.
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 Given more time, the planning engine could evolve into:
 
@@ -320,12 +294,9 @@ Given more time, the planning engine could evolve into:
 - teacher workload balancing
 - preferred timeslot matching
 - AI-assisted schedule generation
-- demand-based section creation
-- Comprehensive unit and integration test coverage
-- Additional time would have been invested in automated testing, with priority given to core functionality during the challenge timeframe
-
+- demand or event driven section creation 
 ---
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -357,8 +328,7 @@ cd green_iguana
 #### 2. Ensure Database Exists
 
 ```bash
-touch maplewood_school.sqlite
-chmod 666 maplewood_school.sqlite
+ls maplewood_school.sqlite
 ```
 
 ---
@@ -380,7 +350,7 @@ docker compose up --build
 
 ---
 
-#### 🛑 Stop Application
+#### Stop Application
 
 ```bash
 docker compose down
@@ -388,7 +358,7 @@ docker compose down
 
 ---
 
-## 🧪 Useful Commands
+## Useful Commands
 
 ### Running Containers
 
@@ -419,37 +389,81 @@ docker logs maplewood-frontend
 ```bash
 docker compose up --build
 ```
-
 ---
+## UI User Flow
+### Login Page
+When the application starts, the first screen displayed is a simulated authentication page.
+Users are asked to enter a **Student ID**.
+For demo purposes, it is recommended to use:101
+This student account contains enough existing data to explore the system features.
+Once a valid Student ID is entered, click Next to proceed to the Dashboard.
+![Log In Page](/docs/images/manual/login.png)
 
-## 🧠 Design Decisions
+### Course Registration Flow
+The following screenshots demonstrate how a student can register for a course.
 
-### Monorepo Structure
+#### 1. Dashboard
+From the Dashboard, click the menu button in the top-right corner.
+This will open the navigation menu.
+![Dashboard](/docs/images/manual/dashboard.png)
 
-Frontend and backend are maintained in one repository to simplify:
+#### 2. Click Browse Course
+From the menu options, click Browse Courses. You will be redirected to a page listing all available courses.
+![Course Details](/docs/images/manual/clickbrowsecourse.png)
 
-- onboarding
-- local development
-- version consistency
-- deployment coordination
+#### 3. Select a Course
+Click View on any course of interest to see full course details and available enrollment options.
+![Dashboard](/docs/images/manual/selectcourse.png)
 
-### SQLite Database
+#### 4. Enroll in an Available Section
+The course details page displays:
 
-SQLite was selected because:
+- Course information
+- Available sections
+- Time slots
+- Enrollment actions
 
-- zero external setup required
-- lightweight
-- ideal for demos and coding challenges
+Click Enroll on a preferred section.
+![Enroll](/docs/images/manual/coursedetailsenroll.png)
 
-### Docker Compose
+#### 5. Enrollment Result
+After submitting enrollment, the system returns either:
+##### ✅ Success Response
+![Enroll](/docs/images/manual/success.jpeg)
+##### ❌ Failure Response
+Enrollment blocked due to business rule validation such as:
 
-Used to provide a single-command startup experience and eliminate machine-specific setup issues.
+- schedule conflict
+- missing prerequisite
+- full capacity
+- maximum course load reached
+![Enroll](/docs/images/manual/fail.jpeg)
 
----
+### Enrollments Page
+#### 1. Dashboard
+From the Dashboard, click the menu button in the top-right corner.
+This will open the navigation menu.
+![Dashboard](/docs/images/manual/dashboard.png)
 
-## 📋 Testing Scenarios
+#### 2. Click Browse Course
+From the menu options, click **Enrollments**.
+You will be redirected to the page showing all courses currently registered for the active semester.
+![Course Details](/docs/images/manual/clickenrollments.png)
 
-### ✅ Scenario 1: Valid Enrollment
+#### 3. Current Semester Enrolments
+he Enrollments page displays the student’s active course registrations for the current semester.
+Users can review their selected courses and current schedule.
+![Course Details](/docs/images/manual/emrollments.png)
+___
+
+## Testing
+
+### Unit Tests Coverage
+![Code coverage](/docs/images/codecoverage.png)
+
+### Business Testing Scenarios
+
+#### ✅ Scenario 1: Valid Enrollment
 
 Student **Joseph Young** (`student_id: 101`) enrolls in **Chemistry I**
 
@@ -467,7 +481,7 @@ Enrollment successful
 
 ---
 
-### ❌ Scenario 2: Missing Prerequisite
+#### ❌ Scenario 2: Missing Prerequisite
 
 Student attempts **English II: Literature**
 
@@ -480,40 +494,40 @@ English I: Composition
 Result:
 
 ```text
-Enrollment blocked
+Enrollment blocked - missing prerequisite
 ```
 
 ---
 
-### ❌ Scenario 3: Schedule Conflict
+#### ❌ Scenario 3: Schedule Conflict
 
 Student already enrolled in:
 
 ```text
-Chemistry I (12:00–13:00)
+Chemistry I (13:00–14:00)
 ```
 
 Attempts:
 
 ```text
-Algebra I (12:00–13:00)
+Algebra I (13:00–14:00)
 ```
 
 Result:
 
 ```text
-Enrollment blocked
+Enrollment blocked - schedule conflict
 ```
 
 ---
 
-### ❌ Scenario 4: Maximum Course Limit (5)
+#### ❌ Scenario 4: Maximum Course Limit (5)
 
 Ensure the student is already enrolled in the following five courses:
 
 - World History
 - Chemistry I
-- Algebra I
+- Algebra I (Different Time Slot with Chemistry 1)
 - Intro to Programming
 - Journalism
 
@@ -524,12 +538,12 @@ Since maximum course load validation is executed first, enrollment is rejected.
 Result:
 
 ```text
-Enrollment blocked
+Enrollment blocked - maximum course limit reached
 ```
 
 ---
 
-### Valid Courses that Joseph Young can enroll at the same time (Student Number 101)
+#### Valid Courses that Joseph Young can enroll at the same time (Student Number 101)
 
 - World History
 - Chemistry I
@@ -539,7 +553,7 @@ Enrollment blocked
 
 ---
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### Backend Not Starting
 
@@ -553,37 +567,16 @@ docker logs maplewood-backend
 docker logs maplewood-frontend
 ```
 
-### Database Issues
-
-```bash
-chmod 666 maplewood_school.sqlite
-```
-
 ---
 
-
-
-## 👨‍💻 Engineering Notes
-
-This project emphasizes:
-
-- clean separation of concerns
-- maintainable code structure
-- real-world validation logic
-- production-style containerization
-- developer experience
-
----
-
-## 🎯 Quick Start
+## Quick Start
 
 ```bash
 docker compose up --build
 ```
 
-Application is ready 🚀
 
-## ✅ Submission Notes
+## Submission Notes
 
 This solution focuses on demonstrating:
 
