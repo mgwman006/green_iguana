@@ -1,16 +1,13 @@
 package com.maplewood.service.enrollment;
 
+import com.maplewood.exception.EnrollmentValidationException;
 import com.maplewood.model.*;
 import com.maplewood.repository.CourseRepository;
 import com.maplewood.repository.EnrollmentRepository;
 import com.maplewood.repository.StudentCourseHistoryRepository;
-import com.maplewood.util.Constant;
-import com.maplewood.util.Result;
-import com.maplewood.util.error.EnrollmentValidationError;
+import com.maplewood.exception.error.EnrollmentValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,64 +16,65 @@ import java.util.stream.Collectors;
 public class EnrollmentValidationService
 {
   private final Map<Long, Set<Long>> prerequisiteClosure = new HashMap<>();
-
   private final CourseRepository courseRepository;
   private final EnrollmentRepository enrollmentRepository;
   private final StudentCourseHistoryRepository studentCourseHistoryRepository;
 
 
-  public Result<Boolean> validate(Student student, Section section)
+  public void validateEnrollment(Student student, Section section)
   {
-    try
+    Course course = section.getCourse();
+    List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
+
+    if (isDuplicate(enrollments,section,course))
     {
-      Course course = section.getCourse();
-      if (ObjectUtils.isEmpty(course))
-      {
-        return Result.failure(Constant.COURSE_NOT_FOUND);
-      }
-
-      if (!isValidGradeLevel(student, course))
-      {
-        return Result.failure(EnrollmentValidationError.INVALID_GRADE_LEVEL);
-      }
-      if (!hasCapacity(student))
-      {
-        return Result.failure(EnrollmentValidationError.MAXIMUM_COURSE_LIMIT_REACHED);
-      }
-      if (isTimeConflicts(student, section.getTimeSlots()))
-      {
-        return Result.failure(EnrollmentValidationError.SCHEDULE_CONFLICT);
-      }
-
-      if (!hasValidPrerequisites_v2(student, course))
-      {
-        return Result.failure(EnrollmentValidationError.MISSING_PREREQUISITE);
-      }
-
-      return Result.success(Constant.ENROLLMENT_SUCCEDED,Boolean.TRUE);
-    }//try
-    catch (Exception exception)
+      throw new EnrollmentValidationException(EnrollmentValidationError.DUPLICATE);
+    }
+    if (isInValidGradeLevel(student, course))
     {
-      return Result.failure(exception.getMessage());
+      throw new EnrollmentValidationException(EnrollmentValidationError.INVALID_GRADE_LEVEL);
+    }
+    if (student.hasReachedCoursesLimit())
+    {
+      throw new EnrollmentValidationException(EnrollmentValidationError.MAXIMUM_COURSE_LIMIT_REACHED);
+    }
+    if (isTimeConflicting(enrollments, section.getTimeSlots()))
+    {
+      throw new EnrollmentValidationException(EnrollmentValidationError.SCHEDULE_CONFLICT);
+    }
+    if (!hasMetPreRequisites(student, course))
+    {
+      throw new EnrollmentValidationException(EnrollmentValidationError.MISSING_PREREQUISITE);
     }
   }
 
-  private boolean hasCapacity(Student section)
+  private boolean isDuplicate(List<Enrollment> enrollments, Section section, Course course)
   {
-    long enrolled = section.getEnrollments().size();
-    return enrolled < Constant.STUDENT_COURSES_LIMIT;
+    for (Enrollment enrollment : enrollments)
+    {
+      Section currentSection = enrollment.getSection();
+
+      if (currentSection.getId().equals(section.getId()))
+      {
+        return true;
+      }
+
+      if (currentSection.getCourse().getId().equals(course.getId()))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
-  private boolean isValidGradeLevel(Student student, Course course)
+  private boolean isInValidGradeLevel(Student student, Course course)
   {
-    return student.getGradeLevel() <= course.getGradeLevelMax() &&
-      student.getGradeLevel() >= course.getGradeLevelMin();
+    return student.getGradeLevel() > course.getGradeLevelMax() ||
+      student.getGradeLevel() < course.getGradeLevelMin();
   }
 
-  private boolean isTimeConflicts(Student student, Set<TimeSlot> newSlots)
+  private boolean isTimeConflicting(List<Enrollment> enrollments, Set<TimeSlot> newSlots)
   {
-    List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
-
     for (Enrollment enrollment : enrollments)
     {
       Set<TimeSlot> currentSlots = enrollment.getSection().getTimeSlots();
@@ -95,26 +93,9 @@ public class EnrollmentValidationService
     return false;
   }
 
-  private boolean hasValidPrerequisites(Student student, Course course)
+  private boolean hasMetPreRequisites(Student student, Course course)
   {
-    if (course.getPrerequisite() == null)
-    {
-      return true;
-    }
-
-    Set<Long> completedCourseIds =
-      studentCourseHistoryRepository.findPassedHistory(student.getId())
-        .stream()
-        .map(StudentCourseHistory::getCourseId)
-        .collect(Collectors.toSet());
-
-    return completedCourseIds.contains(course.getPrerequisite().getId());
-  }
-
-  public boolean hasValidPrerequisites_v2(Student student, Course course)
-  {
-    Set<Long> passed =
-      studentCourseHistoryRepository.findPassedHistory(student.getId())
+    Set<Long> passed = studentCourseHistoryRepository.findPassedHistory(student.getId())
         .stream()
         .map(StudentCourseHistory::getCourseId)
         .collect(Collectors.toSet());
@@ -144,6 +125,5 @@ public class EnrollmentValidationService
       prerequisiteClosure.put(course.getId(), closure);
     }
   }
-
 
 }

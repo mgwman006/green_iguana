@@ -1,4 +1,4 @@
-package com.maplewood.exception.initialization;
+package com.maplewood.exception;
 
 /**
  * Base exception for all initialization-related failures

@@ -3,8 +3,7 @@ package com.maplewood.service.scheduler;
 
 import com.maplewood.model.Teacher;
 import com.maplewood.model.TimeSlot;
-import com.maplewood.repository.TeacherRepository;
-import com.maplewood.util.enums.WeekDay;
+import com.maplewood.enums.WeekDay;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -77,18 +76,17 @@ public class TeacherAvailabilityService {
       }
     }
 
-//    boolean conflict = existingSlots.stream().anyMatch(existing ->
-//      existing.getDay().equals(slot.getDay()) &&
-//        existing.getStartHour() < slot.getEndHour() &&
-//        slot.getStartHour() < existing.getEndHour()
-//    );
+    // Check daily hour limits (max 4 teaching hours per day)
+    Map<String, Long> hoursPerDay = new HashMap<>();
 
-    // Check daily hour limits (max 4 hours per day)
-    Map<String, Long> hoursPerDay = slots.stream()
-      .collect(Collectors.groupingBy(
-        slot -> slot.getDay().toString(),
-        Collectors.counting()
-      ));
+    for (TimeSlot slot : slots)
+    {
+      String day = slot.getDay().toString();
+      Long duration = (long) (slot.getEndHour() - slot.getStartHour());
+
+      Long currentHours = hoursPerDay.getOrDefault(day, 0L);
+      hoursPerDay.put(day, currentHours + duration);
+    }
 
     for (Map.Entry<String, Long> entry : hoursPerDay.entrySet())
     {

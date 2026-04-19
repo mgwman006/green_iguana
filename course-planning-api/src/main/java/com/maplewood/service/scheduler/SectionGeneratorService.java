@@ -35,24 +35,16 @@ public class SectionGeneratorService {
 
   private static final Logger log = LoggerFactory.getLogger(SectionGeneratorService.class);
 
-  @Transactional
-  public void resetSchedule()
-  {
-    sectionRepository.deleteAll();
-  }
-
   /**
    * Entry point for generating all sections at startup.
    */
+  @Transactional
   public void generateAllSections()
   {
 
-    Optional<Semester> optionalSemester = semesterRepository.findActiveSemester();
-    if (optionalSemester.isEmpty())
-    {
-      throw new IllegalStateException("Semester not found");
-    }
-    Semester activeSemester = optionalSemester.get();
+    Semester activeSemester = semesterRepository.findActiveSemester()
+      .orElseThrow(() -> new IllegalStateException("Semester not found"));
+
     List<Classroom> rooms = classroomRepository.findAll();
     List<Teacher> teachers = teacherRepository.findAll();
     List<Course> courses = courseRepository.findAll();
@@ -72,7 +64,8 @@ public class SectionGeneratorService {
   /**
    * Generates sections for a single course.
    */
-  private void generateSectionsForCourse(Course course, List<Teacher> teachers, List<Classroom> rooms)
+  @Transactional
+  public void generateSectionsForCourse(Course course, List<Teacher> teachers, List<Classroom> rooms)
   {
     //Get all possible weekly Schedule
     List<Set<TimeSlot>> patterns = TimeSlotProvider.getPatterns(course.getHoursPerWeek());
@@ -135,6 +128,13 @@ public class SectionGeneratorService {
       }
 
       section.setTimeSlots(slots);
+      String signature = section.getSignature();
+      section.setSignature(signature);
+      if (sectionRepository.existsBySignature(signature))
+      {
+        continue;
+      }
+
       sectionRepository.save(section);
       log.info("Section created for course {} with teacher {} in room {}", course.getName(), selectedTeacher.getId(), selectedRoom.getId());
     }

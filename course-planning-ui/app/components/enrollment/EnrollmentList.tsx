@@ -17,15 +17,17 @@ export default function EnrollmentList()
     const deregister = async (enrollmentId: number) => {
         try {
             await enrollmentsApi.deregister(enrollmentId);
-
             dispatch({
                 type: "REMOVE_ENROLLMENT",
                 payload: enrollmentId,
             });
-
             messageApi.success("Course deregistered successfully");
-        } catch (err: any) {
-            messageApi.error(err?.message ?? "Failed to deregister");
+        } catch (error: unknown) {
+            messageApi.error(
+                error instanceof Error
+                    ? error.message
+                    : "Unexpected error"
+            );
         }
     };
 

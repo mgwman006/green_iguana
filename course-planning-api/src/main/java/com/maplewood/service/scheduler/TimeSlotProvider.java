@@ -1,8 +1,9 @@
 package com.maplewood.service.scheduler;
 
 
+import com.maplewood.exception.InitializationException;
 import com.maplewood.model.TimeSlot;
-import com.maplewood.util.enums.WeekDay;
+import com.maplewood.enums.WeekDay;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +18,7 @@ public class TimeSlotProvider
 
   private TimeSlotProvider()
   {
-    throw new RuntimeException("Can not be initiated");
+    throw new InitializationException("Can not be initiated");
   }
 
   public static List<Set<TimeSlot>> getPatterns(int hours)
@@ -62,17 +63,15 @@ public class TimeSlotProvider
   private static Set<TimeSlot> getTimeSlotsForSixHoursWorkLoad()
   {
     Set<TimeSlot> slots = new HashSet<>();
-
-    // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 12, 13);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 15, 16);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 12, 13);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 15, 16);
     slots.add(timeSlot2);
-    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 12, 13);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 15, 16);
     slots.add(timeSlot3);
-    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 12, 13);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 15, 16);
     slots.add(timeSlot4);
-    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 12, 14);
+    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 15, 17);
     slots.add(timeSlot5);
     return slots;
   }
@@ -82,15 +81,15 @@ public class TimeSlotProvider
     Set<TimeSlot> slots = new HashSet<>();
 
     // First Pattern
-    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 14, 15);
+    TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 13, 14);
     slots.add(timeSlot1);
-    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 14, 15);
+    TimeSlot timeSlot2 = new TimeSlot(WeekDay.TUE, 13, 14);
     slots.add(timeSlot2);
-    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 14, 15);
+    TimeSlot timeSlot3 = new TimeSlot(WeekDay.WED, 13, 14);
     slots.add(timeSlot3);
-    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 14, 15);
+    TimeSlot timeSlot4 = new TimeSlot(WeekDay.THU, 13, 14);
     slots.add(timeSlot4);
-    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 14, 16);
+    TimeSlot timeSlot5 = new TimeSlot(WeekDay.FRI, 13, 15);
     slots.add(timeSlot5);
     return slots;
   }
@@ -123,13 +122,10 @@ public class TimeSlotProvider
   private static Set<TimeSlot> getTimeSlotsForFourHoursWorkLoad2()
   {
     Set<TimeSlot> slots = new HashSet<>();
-
-    // Pattern 2 (morning spread)
     slots.add(new TimeSlot(WeekDay.MON, 11, 12));
     slots.add(new TimeSlot(WeekDay.TUE, 11, 12));
     slots.add(new TimeSlot(WeekDay.WED, 11, 12));
     slots.add(new TimeSlot(WeekDay.THU, 11, 12));
-
     return slots;
   }
 
@@ -138,15 +134,12 @@ public class TimeSlotProvider
   private static Set<TimeSlot> getTimeSlotsForThreeHoursWorkLoad()
   {
     Set<TimeSlot> slots = new HashSet<>();
-    // First Pattern
     TimeSlot timeSlot1 = new TimeSlot(WeekDay.MON, 8, 9);
     slots.add(timeSlot1);
     TimeSlot timeSlot2 = new TimeSlot(WeekDay.WED, 8, 9);
     slots.add(timeSlot2);
     TimeSlot timeSlot3 = new TimeSlot(WeekDay.FRI, 8, 9);
     slots.add(timeSlot3);
-
-
     return slots;
   }
 

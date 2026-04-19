@@ -1,5 +1,8 @@
-package com.maplewood.util.enums;
+package com.maplewood.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum WeekDay {
   MON(1),
   TUE(2),
@@ -13,7 +16,4 @@ public enum WeekDay {
     this.order = order;
   }
 
-  public int getOrder() {
-    return order;
-  }
 }

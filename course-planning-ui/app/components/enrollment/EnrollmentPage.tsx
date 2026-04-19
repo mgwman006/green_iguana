@@ -16,8 +16,12 @@ export default function EnrollmentPage() {
             try {
                 const data = await semesterApi.getActiveSemester();
                 setSemester(data);
-            } catch (err: any) {
-                messageApi.error(err);
+            } catch (error: unknown) {
+                messageApi.error(
+                    error instanceof Error
+                        ? error.message
+                        : "Unexpected error"
+                );
             } finally {
                 setLoading(false);
             }

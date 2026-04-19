@@ -17,15 +17,15 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response) {
       return Promise.reject(
-        error.response.data?.message || "Server error occurred"
+          new Error(error.response.data?.message ?? "Server error occurred")
       );
     }
 
     if (error.request) {
-      return Promise.reject("No response from server");
+      return Promise.reject(new Error("No response from server"));
     }
 
-    return Promise.reject("Unexpected error");
+    return Promise.reject(new Error("Unexpected error"));
   }
 );
 
@@ -48,8 +48,6 @@ export const studentsApi = {
     const res = await apiClient.get<ApiResponse<StudentProfile>>(`/students/${id}/profile`);
     return handleResponse(res.data);
   },
-
-  getSchedule: (id: number) => apiClient.get(`/students/${id}/schedule`),
 };
 
 export const enrollmentsApi = {
@@ -60,7 +58,7 @@ export const enrollmentsApi = {
   },
   deregister: async (enrollmentId:number) =>
   {
-    const res = await apiClient.delete<ApiResponse<String>>(`/enrollments/${enrollmentId}/deregister`);
+    const res = await apiClient.delete<ApiResponse<null>>(`/enrollments/${enrollmentId}/deregister`);
     return handleResponse(res.data);
   }
 };
@@ -75,7 +73,7 @@ export const semesterApi = {
 
 export function handleResponse<T>(response: ApiResponse<T>): T {
   if (!response.success) {
-    throw new Error(response.message || "Request failed");
+    throw new Error(response.message ?? "Request failed");
   }
 
   return response.data;
